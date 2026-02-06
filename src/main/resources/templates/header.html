@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header" class="site-header">
+    <div class="header-left">
+        <a th:href="@{/shop}" class="logo">
+            <img th:src="@{/images/logo.png}" alt="KEN INTERIOR SHOP">
+        </a>
+    </div>
+
+    
+    <div class="header-right">
+        <a th:href="@{/cart}" class="cart">
+            <span class="cart-count">0</span>
+            <img th:src="@{/images/cart.png}" alt="cart">
+        </a>
+
+        <a th:href="@{/login}" class="header-link">ログイン</a>
+        <a th:href="@{/shop/registerform}" class="header-link">会員登録</a>
+    </div>
+</header>
+
+</body>
+</html>
