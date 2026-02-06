@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <link th:href="@{/css/login_1.css}" rel="stylesheet" href="login_1.css">
+
+</head>
+<body>
+	<div id="wrapper">
+		<header>
+		<h1>ログイン</h1>
+			<a href="top">トップに戻る</a>
+		</header>
+		<div id="form-area">
+			<div th:if="${validationError}"> 
+				<p th:text="${validationError}" ></p> 
+			</div>
+		<form th:action="@{/login}" th:object="${loginForm}" method="post">
+			<div th:if="${param.error}">
+			</div>
+			<div class="form-row">
+				<label for="loginInput">ユーザーID</label>
+				<input th:field="*{loginInput}" placeholder="会員IDもしくはメールアドレス">
+			</div>
+			<div class="form-row">
+				<label for="memberPassword">パスワード</label>
+				<input type="password" th:field="*{memberPassword}">
+				</div>
+			<div class="form-row">
+				<input type="submit" value="ログイン">
+				
+		</form>
+		
+			<!-- ログイン失敗時のメッセージ -->
+			<div th:if="${param.error}">
+			    <p>ログインに失敗しました</p>
+			</div>
+			
+			<!-- ログアウト時のメッセージ -->
+			<div th:if="${param.logout}">
+			    <p>ログアウトしました</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
