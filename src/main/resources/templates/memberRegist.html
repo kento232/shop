@@ -1,0 +1,145 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>会員登録</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/registration.css}">
+</head>
+
+<body>
+
+	<!-- ヘッダー -->
+	<div th:replace="~{header :: header}"></div>
+
+	<main class="page">
+		<div class="container">
+
+			<h2 class="page-title">会員登録</h2>
+
+			<!-- ここ重要：th:object は userForm -->
+			<form class="card" th:action="@{/shop/register}" th:object="${userForm}" method="post">
+
+				<!-- 名前 -->
+				<div class="field">
+					<label class="label">名前 <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{name}" placeholder="例）山田太郎">
+					<p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+				</div>
+
+				<!-- 名前（カナ） -->
+				<div class="field">
+					<label class="label">名前（カナ） <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{nameKana}" placeholder="例）ヤマダタロウ">
+					<p class="error" th:if="${#fields.hasErrors('nameKana')}" th:errors="*{nameKana}"></p>
+				</div>
+
+				<!-- メール -->
+				<div class="field">
+					<label class="label">メールアドレス <span class="required">必須</span></label>
+					<input class="input" type="email" th:field="*{email}" placeholder="例）test@example.com">
+					<p class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+				</div>
+
+				<!-- 郵便番号 -->
+				<div class="field">
+					<label class="label">郵便番号（ハイフンなし） <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{postcode}" placeholder="例）8120011">
+					<p class="error" th:if="${#fields.hasErrors('postcode')}" th:errors="*{postcode}"></p>
+				</div>
+
+				<!-- 住所 -->
+				<div class="field">
+					<label class="label">住所 <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{address}" placeholder="例）福岡県福岡市...">
+					<p class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+				</div>
+
+				<!-- 電話番号 -->
+				<div class="field">
+					<label class="label">電話番号（ハイフンなし） <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{telephonenumber}" placeholder="例）09012345678">
+					<p class="error" th:if="${#fields.hasErrors('telephonenumber')}" th:errors="*{telephonenumber}"></p>
+				</div>
+
+				<!-- 生年月日 -->
+				<div class="field">
+					<label class="label">生年月日（yyyyMMdd） <span class="required">必須</span></label>
+					<input class="input" type="text" th:field="*{birthDate}" placeholder="例）19991231">
+					<p class="error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+				</div>
+
+				<!-- パスワード -->
+				<div class="field">
+					<label class="label">パスワード <span class="required">必須</span></label>
+					<input class="input" type="password" th:field="*{password}" placeholder="10文字以上">
+					<p class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+				</div>
+
+				<!-- 確認パスワード -->
+				<div class="field">
+					<label class="label">確認パスワード <span class="required">必須</span></label>
+					<input class="input" type="password" th:field="*{confirmPassword}" placeholder="もう一度入力">
+					<p class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
+				</div>
+
+				<!-- 支払方法（DB: char(1)なので valueは1/2） -->
+				<div class="field">
+					<label class="label">支払方法 <span class="required">必須</span></label>
+					<div class="radio-group">
+						<label>
+							<input type="radio" th:field="*{payment}" value="1"> クレジットカード
+						</label>
+						<label>
+							<input type="radio" th:field="*{payment}" value="2"> 現金
+						</label>
+					</div>
+					<p class="error" th:if="${#fields.hasErrors('payment')}" th:errors="*{payment}"></p>
+				</div>
+
+				<!-- クレジットカード種別（DB: char(1) / null可） -->
+				<div class="field card-area">
+					<label class="label">クレジットカード種類</label>
+					<div class="radio-group" style="flex-wrap: wrap;">
+						<label><input type="radio" th:field="*{creditType}" value="1"> VISA</label>
+						<label><input type="radio" th:field="*{creditType}" value="2"> Master</label>
+						<label><input type="radio" th:field="*{creditType}" value="3"> JCB</label>
+						<label><input type="radio" th:field="*{creditType}" value="4"> AMERICAN EXPRESS</label>
+					</div>
+					<p class="error" th:if="${#fields.hasErrors('creditType')}" th:errors="*{creditType}"></p>
+				</div>
+
+				<div class="field">
+					<label class="label">クレジットカード番号</label>
+					<input class="input" type="text" th:field="*{creditNumber}" placeholder="例）4111111111111111">
+					<p class="error" th:if="${#fields.hasErrors('creditNumber')}" th:errors="*{creditNumber}"></p>
+				</div>
+
+				<div class="field">
+					<label class="label">クレジットカード名義</label>
+					<input class="input" type="text" th:field="*{creditName}" placeholder="例）TARO YAMADA">
+					<p class="error" th:if="${#fields.hasErrors('creditName')}" th:errors="*{creditName}"></p>
+				</div>
+
+				<div class="field">
+					<label class="label">セキュリティー番号</label>
+					<input class="input" type="text" th:field="*{creditSecurityNumber}" placeholder="例）123">
+					<p class="error" th:if="${#fields.hasErrors('creditSecurityNumber')}"
+						th:errors="*{creditSecurityNumber}"></p>
+				</div>
+
+				<!-- 登録ボタン（画像っぽく下にデカく） -->
+				<div class="actions" style="justify-content: center;">
+					<button class="btn" type="submit" style="width: 100%; max-width: 520px;">登録</button>
+				</div>
+
+			</form>
+
+		</div>
+	</main>
+
+</body>
+
+</html>

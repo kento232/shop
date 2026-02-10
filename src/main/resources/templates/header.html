@@ -15,7 +15,7 @@
             <span class="cart-count">0</span>
             <img th:src="@{/images/cart.png}" alt="cart">
         </a>
-
+<p th:if="${session.loginUser != null}"> ようこそ、<span th:text="${session.loginUser.memberName}"></span> さん </p>
         <a th:href="@{/login}" class="header-link">ログイン</a>
         <a th:href="@{/shop/registerform}" class="header-link">会員登録</a>
     </div>

@@ -1,0 +1,96 @@
+@charset "UTF-8";/* 全体 */
+.page{
+  background:#f5f6f8;
+  padding:28px 12px 60px;
+}
+
+.card{
+  max-width:920px;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid #e6e8ee;
+  border-radius:6px;
+  padding:28px 28px 36px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.title{
+  font-size:22px;
+  font-weight:700;
+  margin:0 0 18px;
+}
+
+/* ② 青枠メッセージ */
+.notice{
+  border:2px solid #2b63ff;
+  background:#eef3ff;
+  color:#1b2d63;
+  border-radius:4px;
+  padding:12px 14px;
+  font-size:14px;
+  margin:0 0 18px;
+}
+
+/* ③ 表 */
+.table-wrap{
+  border:1px solid #e6e8ee;
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.info{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.info th,
+.info td{
+  border-bottom:1px solid #e6e8ee;
+  padding:12px 14px;
+  vertical-align:middle;
+  font-size:14px;
+}
+
+.info th{
+  width:220px;
+  background:#fafbfc;
+  font-weight:700;
+  color:#222;
+}
+
+.info td{
+  color:#222;
+  word-break:break-word;
+}
+
+.info tr:last-child th,
+.info tr:last-child td{
+  border-bottom:none;
+}
+
+.muted{
+  color:#8a8f9a;
+}
+
+/* ④ ボタン */
+.actions{
+  display:flex;
+  justify-content:center;
+  margin-top:22px;
+}
+
+.btn{
+  min-width:180px;
+  padding:12px 18px;
+  border:none;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn:hover{
+  opacity:0.92;
+}

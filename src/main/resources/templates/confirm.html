@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>会員情報確認</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/confirm.css}">
+</head>
+<body>
+
+<!-- ① ヘッダー -->
+<div th:replace="~{header :: header}"></div>
+
+<main class="page">
+  <section class="card">
+
+    <h1 class="title">会員情報確認</h1>
+
+    <!-- ② メッセージ枠 -->
+    <div class="notice">
+      登録されました。以下の情報を大切に保管するようにしてください。
+    </div>
+
+    <!-- ③ 情報テーブル -->
+    <div class="table-wrap">
+      <table class="info">
+        <tbody>
+          <tr>
+            <th>会員ID</th>
+            <td th:text="${user.memberId}">7</td>
+          </tr>
+          <tr>
+            <th>メールアドレス</th>
+            <td th:text="${userForm.email}">example@mail.com</td>
+          </tr>
+          <tr>
+            <th>パスワード</th>
+            <td class="muted">セキュリティ対策のため表示していません</td>
+          </tr>
+          <tr>
+            <th>名前</th>
+            <td th:text="${userForm.name}">山田 太郎</td>
+          </tr>
+          <tr>
+            <th>名前(カナ)</th>
+            <td th:text="${userForm.nameKana}">ヤマダ タロウ</td>
+          </tr>
+          <tr>
+            <th>郵便番号</th>
+            <td th:text="${userForm.postcode}">8120011</td>
+          </tr>
+          <tr>
+            <th>住所</th>
+            <td th:text="${userForm.address}">福岡県福岡市…</td>
+          </tr>
+          <tr>
+            <th>電話番号</th>
+            <td th:text="${userForm.telephonenumber}">09012345678</td>
+          </tr>
+          <tr>
+            <th>生年月日</th>
+            <td th:text="${userForm.birthDate}">19991231</td>
+          </tr>
+          <tr>
+            <th>支払方法</th>
+            <td th:text="${user.paymentDisplay}">クレジットカード</td>
+          </tr>
+          <tr>
+            <th>クレジットカード種別</th>
+            <td th:text="${userForm.creditType}">VISA</td>
+          </tr>
+          <tr>
+            <th>クレジットカード番号</th>
+            <td th:text="${userForm.creditNumber}">0000 0000 0000 0000</td>
+          </tr>
+          <tr>
+            <th>クレジットカード名義</th>
+            <td th:text="${userForm.creditName}">TARO YAMADA</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ④ 確認完了ボタン -->
+    <div class="actions">
+      <form th:action="@{/shop}" method="get">
+        <button class="btn" type="submit">確認完了</button>
+      </form>
+    </div>
+
+  </section>
+</main>
+
+</body>
+</html>
