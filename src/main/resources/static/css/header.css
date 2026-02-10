@@ -1,0 +1,201 @@
+/* =========================================
+   ヘッダー共通
+========================================= */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* 内側レイアウト：左右に分ける */
+.site-header__inner {
+  width: 1200px;             /* 必要に応じて 96% + max-width に変更可 */
+  margin: 0 auto;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   左：ロゴ
+========================================= */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.site-logo { display: inline-flex; align-items: center; text-decoration: none; color: #111; }
+.site-logo__img {
+  /* SVGロゴのサイズはCSSで制御 */
+  display: block;
+  height: 28px;   /* ← 24〜36pxの範囲でお好み調整 */
+  width: auto;
+}
+/* 中央エリア（検索やメニュー用） */
+.header-center {
+  flex: 1 1 auto;           /* 左右の間で伸びる */
+  display: flex;
+  justify-content: center;  /* 中央揃え */
+  align-items: center;
+}
+
+/* 例：簡易検索フォーム（任意） */
+.search-form {
+  display: flex;
+  gap: 8px;
+  width: min(640px, 100%);
+}
+.search-form input[type="search"] {
+  flex: 1 1 auto;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.search-form button {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+/* =========================================
+   右：カート・ログイン・会員登録（右端へ）
+========================================= */
+.header-right {
+  margin-left: auto;               /* ★ 右寄せの肝 */
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* アンカーの初期スタイル（右側のリンク共通） */
+.header-right a.header-link,
+.header-right a[href] {
+  text-decoration: none;
+  font-size: 14px;
+  color: #222;
+  line-height: 1;
+}
+
+/* =========================================
+   カート（リンク枠・アイコン・バッジ）
+========================================= */
+.cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #eee;
+
+  transition: box-shadow .2s ease, transform .02s ease;
+}
+.cart:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.cart:active { transform: translateY(1px); }
+
+/* アイコン画像（SVG） */
+.cart-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+/* 個数バッジ（右上） */
+
+/* バッジ：右上の角に固定してから 50% 分だけ外へ出す */
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%); /* ←ここがコツ */
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e60000;
+
+color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  z-index: 1;
+
+  pointer-events: none; /* クリックを邪魔しない */
+}
+
+/* アイコン */
+.cart-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+
+/* 文言 */
+.welcome {
+  margin: 0 6px 0 8px;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+
+/* ボタン（ログイン・ログアウト・会員登録） */
+.btn {
+  display: inline-block;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: .2s ease;
+  line-height: 1;
+}
+.btn--solid { background: #000; color: #fff; }
+.btn--solid:hover { opacity: .85; }
+.btn--ghost { background: #fff; color: #222; border-color: #ddd; }
+.btn--ghost:hover { background: #f7f7f7; }
+
+/* フォーム（ログアウト）を横並び維持 */
+.logout-form { display: inline; margin: 0; }
+
+/* レスポンシブ */
+@media (max-width: 1280px) {
+  .site-header__inner { width: 96%; }
+}
+@media (max-width: 768px) {
+  .site-header__inner { height: 64px; gap: 10px; }
+  .site-logo__img { height: 24px; }
+  .welcome { display: none; } /* スマホでは省略 */
+  .btn { padding: 6px 10px; font-size: 12px; }
+  .cart { width: 40px; height: 40px; }
+  .cart-icon { width: 20px; height: 20px; }
+}
+
+/* （デバッグ用）必要なときだけ有効化 */
+/*
+.site-header__inner { outline: 1px dashed #ccc; }
+.header-left { outline: 1px solid #cde; }
+.header-right { outline: 1px solid #dec; }
+*/

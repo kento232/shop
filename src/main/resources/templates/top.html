@@ -1,15 +1,74 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>トップページ</title>
-
-   
-    <link rel="stylesheet" th:href="@{/css/header.css}">
+	<meta charset="UTF-8">
+	<title>トップページ</title>
+	<link th:href="@{/css/top.css}" rel="stylesheet" href="top.css">
+	<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
 </head>
 <body>
-<div th:replace="header :: header"></div>
+	<div th:replace="~{header :: header}"></div>
+	<div sec:authorize="isAuthenticated()">ログインユーザー: <span sec:authentication="name">unknown</span>
+	</div>
+	<div sec:authorize="isAnonymous()">未ログイン</div>
+	
 
+   
+	<!-- 検索 -->
+	<div class="top-actions">
+  <div class="actions-inner">
+    <div class="search-box">
+        <input type="text" placeholder="すべてのカテゴリーから検索">
+        <button>検索</button>
+    </div>
+
+ <!-- カートへ進むボタン -->
+    <a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
+
+ <!-- 商品一覧 -->
+   <h2 class="section-title">おすすめアイテム</h2>
+
+<div class="product-grid"
+     th:if="${products != null and #lists.size(products) > 0}"
+     >
+
+  
+<article class="product-card" th:each="item : ${products}">
+  <!-- 商品詳細ページへのリンク -->
+  <a class="product-thumb"
+     th:href="@{/products/{id}(id=${item['product_id']})}">
+
+    <!-- 画像URLを th:src にセット（Mapキーはブラケット記法が安全） -->
+    <img th:src="@{/images/products/{fn}(fn=${item['product_image']})}"
+         th:alt="${item['product_name']}"
+         loading="lazy">
+  </a>
+
+    <!-- 商品名 -->
+    <h3 class="name" th:text="${item.product_name}">商品名</h3>
+
+    <!-- 価格 -->
+    <div class="price-area">
+
+      <!-- 旧価格（値引き >0 の時だけ表示） -->
+      <span class="price-old"
+            th:if="${item.product_discount_price > 0}"
+            th:text="${#numbers.formatInteger(item.product_price, 3, 'COMMA')} + ' 円'"></span>
+
+      <!-- 現在価格 -->
+      <span class="price-now"
+            th:text="${#numbers.formatInteger(item.product_price - item.product_discount_price, 3, 'COMMA')} + ' 円'"></span>
+    </div>
+
+    <!-- カートへ追加 -->
+     <a class="go-cart-btn" th:href=" @{/cart/add(id=${item.product_id})}"> カートに追加</a>
+   
+     
+   
+
+  </article>
+</div>
 <main>
     
 </main>
