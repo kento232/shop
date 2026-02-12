@@ -19,10 +19,18 @@
 	<div class="top-actions">
   <div class="actions-inner">
     <div class="search-box">
-        <input type="text" placeholder="すべてのカテゴリーから検索">
+		 <form th:action="@{/}" method="get" th:object="${form}">
+        <input type="text" th:field="*{keyword}" placeholder="すべてのカテゴリーから検索">
         <button>検索</button>
+        </form>
     </div>
+<!-- “該当する商品がありません。” の表示 -->
+<div class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
 
+<!-- 既存の一覧 -->
+<div class="product-grid" th:if="${products != null and #lists.size(products) > 0}">
+  <!-- … -->
+</div>
  <!-- カートへ進むボタン -->
     <a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
 
@@ -62,7 +70,7 @@
     </div>
 
     <!-- カートへ追加 -->
-     <a class="go-cart-btn" th:href=" @{/cart/add(id=${item.product_id})}"> カートに追加</a>
+     <a class="go-cart-btn" th:href="@{/cart/add(id=${item.product_id})}"> カートに追加</a>
    
      
    
