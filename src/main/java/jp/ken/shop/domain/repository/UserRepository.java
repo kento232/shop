@@ -22,17 +22,17 @@ public class UserRepository {
     }
 
     // 会員IDで検索
-    public List<UserEntity> findByMemberId(int id) {
+    public List<UserEntity> findByMemberId(int memberId) {
         String sql = "SELECT * FROM t_member WHERE member_id = ?";
        
-        return jdbc.query(sql, new UserRowMapper(), id);
+        return jdbc.query(sql, new UserRowMapper(), memberId);
     }
     
     // メールアドレスで検索
-    public List<UserEntity> findByMemberEmail(String email) {
+    public List<UserEntity> findByMemberEmail(String memberMail) {
         String sql = "SELECT * FROM t_member WHERE member_mail = ?";
        
-        return jdbc.query(sql, new UserRowMapper(), email);
+        return jdbc.query(sql, new UserRowMapper(), memberMail);
     }
    
     public int insert(RegisterEntity entity) {

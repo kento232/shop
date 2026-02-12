@@ -27,6 +27,7 @@ import jp.ken.shop.domain.repository.UserRepository;
 			if (input == null || input.isEmpty()) { 
 				throw new UsernameNotFoundException("会員ID、もしくはメールアドレス、パスワードは必須入力です。");
 			}
+		
 			
 			List<UserEntity> list;
 			//入力が数字だけなら「会員ID」で検索
@@ -45,13 +46,13 @@ import jp.ken.shop.domain.repository.UserRepository;
 			// 1件目を取り出す 
 			UserEntity user = list.get(0);
 			
-			//Spring Security に渡す UserDetails を作成
+			
 			// UserSearchService  #loadUserByUsername の戻り値
 			return User.withUsername(user.getMemberMail())   // username はメールで統一
 					.password(user.getMemberPassword())      // DB のパスワード
 					.roles("USER")
 					.build();
-			
+		
 		}
 }
 

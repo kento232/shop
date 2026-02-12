@@ -22,18 +22,20 @@ public class LoginController {
 	
 	@PostMapping("/login")
 	public String login(
-			@Validated @ModelAttribute LoginForm form,
+			@Validated @ModelAttribute ("loginForm")LoginForm form,
 			BindingResult bindingResult,Model model) {
-			
+
+
+
 		// どちらかが空なら共通エラー 
-		if (form.getLoginInput() == null || form.getLoginInput().isBlank() || 
+		if (bindingResult.hasErrors() || form.getLoginInput() == null || form.getLoginInput().isBlank() || 
 				form.getMemberPassword() == null || form.getMemberPassword().isBlank()) { 
 			model.addAttribute("validationError", "会員ID、もしくはメールアドレス、パスワードは必須入力です。"); 
 			
 			return "login";
 		}
 		// バリデーションOKなら Spring Security に認証を任せる
-		return "forward:/login";
+		return "forward:/perform_login";
 	}
 
 }

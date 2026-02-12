@@ -9,38 +9,39 @@
 <body>
 	<div id="wrapper">
 		<header>
-		<h1>ログイン</h1>
-			<a href="top">トップに戻る</a>
+			<h1>ログイン</h1>
+			<a th:href="@{/top}">トップに戻る</a>
 		</header>
-		<div id="form-area">
-			<div th:if="${validationError}"> 
-				<p th:text="${validationError}" ></p> 
-			</div>
-		<form th:action="@{/login}" th:object="${loginForm}" method="post">
-			<div th:if="${param.error}">
-			</div>
-			<div class="form-row">
-				<label for="loginInput">ユーザーID</label>
-				<input th:field="*{loginInput}" placeholder="会員IDもしくはメールアドレス">
-			</div>
-			<div class="form-row">
-				<label for="memberPassword">パスワード</label>
-				<input type="password" th:field="*{memberPassword}">
-				</div>
-			<div class="form-row">
-				<input type="submit" value="ログイン">
-				
-		</form>
 		
-			<!-- ログイン失敗時のメッセージ -->
-			<div th:if="${param.error}">
-			    <p>ログインに失敗しました</p>
-			</div>
+		<div id="form-area" th:object="${loginForm}">
+			<div class="error" th:if="${validationError}" th:text="${validationError}" ></div>
+		</div>
 			
-			<!-- ログアウト時のメッセージ -->
-			<div th:if="${param.logout}">
-			    <p>ログアウトしました</p>
-			</div>
+		<div class="error" th:if="${param.error}">
+			<p>認証できませんでした。入力内容を確認して再度ログインしてください。</p>
+		</div>
+		
+		<!-- ログアウト後 -->
+		<div class="info" th:if="${param.logout}">
+		<p>ログアウトしました。</p>
+		</div>
+			
+			<form th:action="@{/perform_login}" method="post" th:object="${loginForm}">
+		<!-- CSRF -->
+		<!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+		
+		<div class="form-row">
+			<label th:for="*{loginInput}">ユーザー名</label>
+			<input type="text" th:field="*{loginInput}" name="loginInput" placeholder="会員IDもしくはメールアドレス" autocomplete="username">
+		</div>
+		<div class="form-row">
+			<label th:for="*{memberPassword}">パスワード</label>
+			<input type="password" th:field="*{memberPassword}" name="memberPassword" autocomplete="current-password">
+		</div>
+		<div class="form-row">
+		<input type="submit" value="ログイン">
+		</div>
+			</form>
 		</div>
 	</div>
 </body>
