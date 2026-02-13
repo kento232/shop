@@ -35,7 +35,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 			  
 			
 			  http.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/login","/top","/shop/registerform","/","/error").permitAll()
+					.requestMatchers("/favicon.ico","/products","/login","/top","/shop/registerform","/","/error").permitAll()
 					.requestMatchers("/css/**","/images/**", "/js/**").permitAll()
 					.anyRequest().authenticated());
 			
