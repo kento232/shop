@@ -1,0 +1,147 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  color: #111;
+  background: #fafafa;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 16px 40px;
+}
+
+.page-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.back-btn {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.notice {
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  background: #fff4e5;
+  border: 1px solid #ffd7a8;
+  border-radius: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+}
+
+.list {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.empty {
+  margin: 0;
+  padding: 18px;
+  color: #666;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 90px 1fr 140px;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.item + .item {
+  border-top: 1px solid #f0f0f0;
+}
+
+.thumb img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f3f3f3;
+}
+
+.item-name {
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.delete-btn {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.item-price {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: 700;
+}
+
+.side-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 12px;
+  position: sticky;
+  top: 70px;
+}
+
+.proceed {
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+}
+
+.site-footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 12px;
+}

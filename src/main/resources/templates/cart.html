@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>カート | KEN INTERIOR SHOP</title>
+
+	<!-- ヘッダーCSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<!-- カートCSS -->
+	<link rel="stylesheet" th:href="@{/css/cart.css}">
+</head>
+
+<body>
+
+	<!-- ✅ ヘッダー差し込み -->
+	<div th:replace="~{header :: header}"></div>
+
+	<main class="container">
+		<div class="page-top">
+			<h1 class="page-title">カート詳細</h1>
+			<button class="back-btn" type="button" onclick="location.href='/'">トップ画面に戻る</button>
+		</div>
+
+		<div class="notice" th:if="${needLogin}">
+			購入するためにはログイン、もしくは会員登録が必要です。
+		</div>
+
+		<div class="layout">
+			<section class="list">
+
+				<!-- items が空のとき -->
+				<p class="empty" th:if="${items == null || #lists.isEmpty(items)}">
+					カートに商品がありません。
+				</p>
+
+				<!-- items があるとき -->
+				<div class="item" th:each="it : ${items}">
+					<div class="thumb">
+						<!-- DBの image_path を /images/ 配下として表示 -->
+						<img th:src="@{'/images/products/' + ${it.productImage}}" alt="${it.productName}">
+
+					</div>
+
+					<div class="item-main">
+						<p class="item-name" th:text="${it.productName}">商品名</p>
+
+						<div class="controls">
+							<div class="qty">
+								<select name="qty" disabled>
+									<option th:selected="${it.qty==1}">1</option>
+									<option th:selected="${it.qty==2}">2</option>
+									<option th:selected="${it.qty==3}">3</option>
+									<option th:selected="${it.qty==4}">4</option>
+									<option th:selected="${it.qty==5}">5</option>
+								</select>
+								<span class="unit">個</span>
+							</div>
+							<form th:action="@{/cart/delete}" method="post">
+								<input type="hidden" name="productId" th:value="${it.productId}">
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+								<button class="delete-btn" type="submit">カートから削除</button>
+							</form>
+
+
+						</div>
+					</div>
+
+					<div class="item-price">
+						<span th:text="${#numbers.formatInteger(it.price, 1, 'COMMA')}">0</span> 円
+					</div>
+				</div>
+
+			</section>
+
+			<aside class="side">
+				<div class="side-card">
+					<button class="proceed" type="button" disabled>購入に進む</button>
+				</div>
+			</aside>
+		</div>
+
+		<footer class="site-footer">© KEN INTERIOR SHOP</footer>
+	</main>
+
+</body>
+
+</html>

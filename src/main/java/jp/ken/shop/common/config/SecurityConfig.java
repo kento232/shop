@@ -44,8 +44,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 					.loginProcessingUrl("/perform_login") //Controller から forward される
 					.usernameParameter("loginInput")
 					.passwordParameter("memberPassword")
-					
-
 					.defaultSuccessUrl("/top", true)
 					.failureUrl("/login?error") 
 					

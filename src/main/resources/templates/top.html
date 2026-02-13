@@ -70,7 +70,16 @@
     </div>
 
     <!-- カートへ追加 -->
-     <a class="go-cart-btn" th:href="@{/cart/add(id=${item.product_id})}"> カートに追加</a>
+     
+     <form th:action="@{/cart/add}" method="post">
+  <input type="hidden" name="productId" th:value="${item['product_id']}">
+  <input type="hidden" name="qty" value="1">
+
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+  <button type="submit">カートに追加</button>
+</form>
+
+
    
      
    
