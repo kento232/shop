@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import jp.ken.shop.application.service.CartSearchService;
 import jp.ken.shop.application.service.ProductService;
+import jp.ken.shop.domain.repository.ProductRepository;
 import jp.ken.shop.presentation.form.SearchForm;
 
 @Controller
@@ -22,11 +23,14 @@ public class TopController {
 	private final CartSearchService cartSearchService;
 	private final JdbcTemplate jdbc; // 初期表示（全件系）にだけ使う
 	private final ProductService productService;
+	private final ProductRepository productRepository;
 	
-	public TopController(CartSearchService cartSearchService, JdbcTemplate jdbc,ProductService productService) {
+	public TopController(CartSearchService cartSearchService, JdbcTemplate jdbc,ProductService productService,ProductRepository productRepository) {
 		this.cartSearchService = cartSearchService;
 		this.jdbc = jdbc;
 		this.productService=productService;
+		this.productRepository=productRepository;
+		
 		}
 	
 	/** どのハンドラでも必ず form をモデルに供給（Thymeleafの th:object 対策） */
@@ -74,8 +78,30 @@ public class TopController {
 	// 商品詳細
 	@GetMapping("/products/{productId}")
 	public String detail(@PathVariable String productId, Model model) {
+		
 		var product = productService.getDetailOrThrow(productId); // 見つからなければ 404
 		model.addAttribute("product", product);
+		
+
+		// 商品にカテゴリID/サブカテゴリIDが入っている前提
+		    int categoryId = product.getCategoryId();       // 例: 4
+		    int subcategoryId = product.getSubcategoryId(); // 例: 3
+
+
+
+
+String categoryName = productRepository.findCategoryNameIfValid(categoryId)
+                .orElse("カテゴリ不明");
+        String subcategoryName = productRepository.findSubcategoryNameIfValid(categoryId, subcategoryId)
+                .orElse("サブカテゴリ不明");
+
+
+		    model.addAttribute("product", product);
+		    model.addAttribute("categoryId", categoryId);
+		    model.addAttribute("subcategoryId", subcategoryId);
+		    model.addAttribute("categoryName", categoryName);
+		    model.addAttribute("subcategoryName", subcategoryName);
+
 		return "products"; // product.html（詳細テンプレ）
 		}
 	

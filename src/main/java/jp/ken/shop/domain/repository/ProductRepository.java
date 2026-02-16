@@ -20,6 +20,7 @@ public class ProductRepository {
     private final JdbcTemplate jdbcTemplate;
     private final ProductRowMapper rowMapper = new ProductRowMapper();
 
+    
     /**
      * 公開条件を満たす単品取得（商品詳細用）
      */
@@ -124,4 +125,27 @@ public class ProductRepository {
         Integer total = jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
         return total != null ? total : 0;
     }
+
+    /**
+        * 大分類名を valid_flag=0 のときだけ返す
+        */
+       public Optional<String> findCategoryNameIfValid(int categoryId) {
+           List<String> list = jdbcTemplate.query(
+               "SELECT category_name FROM m_category WHERE category_id = ? AND valid_flag = 0",
+               (rs, i) -> rs.getString("category_name"),
+               categoryId
+           );
+           return list.stream().findFirst();
+       }
+
+public Optional<String> findSubcategoryNameIfValid(int categoryId, int subcategoryId) {
+        List<String> list = jdbcTemplate.query(
+            "SELECT subcategory_name FROM m_subcategory " +
+            "WHERE category_id = ? AND subcategory_id = ? AND valid_flag = 0",
+            (rs, i) -> rs.getString("subcategory_name"),
+            categoryId, subcategoryId
+        );
+        return list.stream().findFirst();
+    }
+
 }

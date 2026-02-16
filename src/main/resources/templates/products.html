@@ -6,125 +6,15 @@
 	<title th:text="${product != null ? product.productName : '商品詳細'}">商品詳細</title>
 	<link th:href="@{/css/products.css}" rel="stylesheet" href="products.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-		:root {
-			--maxw: 1080px;
-			--gap: 16px;
-			--border: #e5e7eb;
-			--muted: #6b7280;
-			--primary: #0ea5e9;
-			--bg: #ffffff;
-		}
+<title>商品詳細 | KEN INTERIOR SHOP</title>
 
-		* {
-			box-sizing: border-box;
-		}
+	<!-- ヘッダーCSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<!-- カートCSS -->
+	<link rel="stylesheet" th:href="@{/css/cart.css}">
 
-		body {
-			font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', 'Meiryo', sans-serif;
-			margin: 0;
-			color: #111827;
-			background: var(--bg);
-		}
 
-		header,
-		main {
-			max-width: var(--maxw);
-			margin: 0 auto;
-			padding: 16px;
-		}
-
-		a {
-			color: var(--primary);
-			text-decoration: none;
-		}
-
-		.muted {
-			color: var(--muted);
-		}
-
-		.wrap {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 24px;
-		}
-
-		.thumb {
-			aspect-ratio: 4/3;
-			background: #f3f4f6;
-			border: 1px solid var(--border);
-			border-radius: 12px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.thumb img {
-			max-width: 100%;
-			max-height: 100%;
-			object-fit: contain;
-		}
-
-		.d-name {
-			font-size: 22px;
-			margin: 0 0 8px;
-		}
-
-		.sku {
-			color: var(--muted);
-			font-size: 13px;
-			margin-bottom: 8px;
-		}
-
-		.d-price {
-			display: flex;
-			align-items: baseline;
-			gap: 8px;
-			margin: 8px 0 16px;
-		}
-
-		.d-price s {
-			color: var(--muted);
-		}
-
-		.d-price strong {
-			font-size: 22px;
-		}
-
-		.pill {
-			font-size: 12px;
-			color: #fff;
-			background: #10b981;
-			padding: 2px 6px;
-			border-radius: 999px;
-		}
-
-		.props {
-			border-top: 1px solid var(--border);
-			margin-top: 16px;
-			padding-top: 16px;
-		}
-
-		.props dl {
-			display: grid;
-			grid-template-columns: 140px 1fr;
-			gap: 8px 16px;
-		}
-
-		.props dt {
-			color: #374151;
-		}
-
-		.props dd {
-			margin: 0;
-		}
-
-		@media (max-width: 860px) {
-			.wrap {
-				grid-template-columns: 1fr;
-			}
-		}
-	</style>
+	<!-- ✅ ヘッダー差し込み -->
 </head>
 
 <body>
@@ -136,6 +26,32 @@
 
 	<!-- 詳細表示 -->
 	<main th:if="${product != null}">
+		<nav class="breadcrumb" aria-label="パンくずリスト">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <!-- 大分類 -->
+    
+<nav class="breadcrumb" aria-label="パンくずリスト" style="margin: 8px 0 16px;">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList" style="display:inline-flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0;">
+    <!-- 大分類 -->
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a th:href="@{/category/{cid}(cid=${categoryId})}" itemprop="item">
+        <span itemprop="name" th:text="${categoryName}">大分類名</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+    <span class="separator" aria-hidden="true">›</span>
+
+    <!-- 中分類（現在位置、リンクにしない場合は <a> を <span> に変える） -->
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+
+<a th:href="@{/category/{cid}/sub/{sid}(cid=${categoryId}, sid=${subcategoryId})}" itemprop="item">
+        <span itemprop="name" th:text="${subcategoryName}">中分類名</span>
+      </a>
+      <meta itemprop="position" content="2" />
+    </li>
+  </ol>
+</nav>
+
 		<div class="wrap">
 			<div class="thumb">
 				<img th:if="${product.productImage != null}"
@@ -158,7 +74,7 @@
 					<span class="pill"
 						th:if="${product.productDiscountPrice != null and product.productDiscountPrice > 0}">SALE</span>
 				</div>
-　　　　　　　　　　<!-- カート追加 -->
+<!-- カート追加 -->
 				<form th:action="@{/cart/add}" method="post">
 					<input type="hidden" name="productId" th:value="${product.productId}">
 					<input type="hidden" name="qty" value="1">
