@@ -18,40 +18,40 @@ import jp.ken.shop.presentation.form.SearchForm;
 @Controller
 public class TopController {
 
-    private static final int INITIAL_LIMIT = 28; // 初期表示の件数
-    private final CartSearchService cartSearchService;
-    private final JdbcTemplate jdbc; // 初期表示（全件系）にだけ使う
-    private final ProductService productService;
+	private static final int INITIAL_LIMIT = 28; // 初期表示の件数
+	private final CartSearchService cartSearchService;
+	private final JdbcTemplate jdbc; // 初期表示（全件系）にだけ使う
+	private final ProductService productService;
+	
+	public TopController(CartSearchService cartSearchService, JdbcTemplate jdbc,ProductService productService) {
+		this.cartSearchService = cartSearchService;
+		this.jdbc = jdbc;
+		this.productService=productService;
+		}
+	
+	/** どのハンドラでも必ず form をモデルに供給（Thymeleafの th:object 対策） */
 
-
-    public TopController(CartSearchService cartSearchService, JdbcTemplate jdbc,ProductService productService) {
-        this.cartSearchService = cartSearchService;
-        this.jdbc = jdbc;
-        this.productService=productService;
-    }
-
-    /** どのハンドラでも必ず form をモデルに供給（Thymeleafの th:object 対策） */
-    @ModelAttribute("form")
-    public SearchForm setUpForm() {
-        return new SearchForm();
-    }
-
-    /** トップ＋検索（/ と /top の両方を受ける） */
-    @GetMapping({"/", "/top"})
-    public String top(@ModelAttribute("form") SearchForm form, Model model) {
-
-        List<Map<String, Object>> products;
-
-        if (StringUtils.hasText(form.getKeyword())) {
-            // キーワード検索（サービス側は空文字のとき List.of() を返す実装のままでOK）
-            products = cartSearchService.search(form.getKeyword().trim());
-
-            if (products == null || products.isEmpty()) {
-                model.addAttribute("noResultMessage", "該当する商品がありません。");
-            }
-        } else {
-            // 初回表示：公開中商品の新しい順（必要なら ORDER BY/件数は調整）
-            String sql = """
+	@ModelAttribute("form")
+	public SearchForm setUpForm() {
+		
+		return new SearchForm();
+		}
+	
+	/** トップ＋検索（/ と /top の両方を受ける） */
+	@GetMapping({"/", "/top"})
+	
+	public String top(@ModelAttribute("form") SearchForm form, Model model) {
+		List<Map<String, Object>> products;
+		
+		if (StringUtils.hasText(form.getKeyword())) {
+			// キーワード検索（サービス側は空文字のとき List.of() を返す実装のままでOK）
+			products = cartSearchService.search(form.getKeyword().trim());
+			if (products == null || products.isEmpty()) {
+				model.addAttribute("noResultMessage", "該当する商品がありません。");
+				}
+			} else {
+				
+				String sql = """
                 SELECT
                     p.product_id,
                     p.product_name,
@@ -65,27 +65,24 @@ public class TopController {
                 ORDER BY p.product_id DESC
                 LIMIT ?
                 """;
-            products = jdbc.queryForList(sql, INITIAL_LIMIT);
-        }
-
-        model.addAttribute("products", products);
-        return "top";
-    }
-
-   
-     
-
-/** 商品詳細（これだけあればOK） */
-    @GetMapping("/products/{productId}")
-    public String detail(@PathVariable String productId, Model model) {
-        var product = productService.getDetailOrThrow(productId); // 見つからなければ 404
-        model.addAttribute("product", product);
-        return "products"; // product.html（詳細テンプレ）
-    }
-
-    /** 当面、/products への直アクセスはトップへ逃がす（エラー回避用） */
-    @GetMapping("/products")
-    public String productsPlaceholder() {
-        return "redirect:/top";
-    }
-}
+				products = jdbc.queryForList(sql, INITIAL_LIMIT);
+				}
+		model.addAttribute("products", products);
+		return "top";
+		}
+	
+	// 商品詳細
+	@GetMapping("/products/{productId}")
+	public String detail(@PathVariable String productId, Model model) {
+		var product = productService.getDetailOrThrow(productId); // 見つからなければ 404
+		model.addAttribute("product", product);
+		return "products"; // product.html（詳細テンプレ）
+		}
+	
+	//エラー回避用
+	
+	@GetMapping("/products")
+	public String productsPlaceholder() {
+		return "redirect:/top";
+		}
+	}

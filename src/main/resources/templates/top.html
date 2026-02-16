@@ -4,8 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>トップページ</title>
-	<link th:href="@{/css/top.css}" rel="stylesheet" href="top.css">
-	<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
+		<link th:href="@{/css/top.css}" rel="stylesheet" href="top.css">
+		<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
 </head>
 <body>
 	<div th:replace="~{header :: header}"></div>
@@ -13,82 +13,176 @@
 	</div>
 	<div sec:authorize="isAnonymous()">未ログイン</div>
 	
-
-   
 	<!-- 検索 -->
 	<div class="top-actions">
-  <div class="actions-inner">
-    <div class="search-box">
+	<div class="actions-inner">
+	<div class="search-box">
 		 <form th:action="@{/}" method="get" th:object="${form}">
-        <input type="text" th:field="*{keyword}" placeholder="すべてのカテゴリーから検索">
-        <button>検索</button>
+		<input type="text" th:field="*{keyword}" placeholder="すべてのカテゴリーから検索">
+		<button>検索</button>
+		</form>
+	</div>
+	<!-- “該当する商品がありません。” の表示 -->
+	<div id="messageArea" class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
+	
+	<!-- カテゴリ選択 -->
+	<div class="category-filter" style="margin:8px 0;">
+
+	<select id="categorySelect">
+		<option value="">すべてのカテゴリー</option>
+	</select>
+	</div>
+
+	<!-- カートへ進むボタン -->
+	<a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
+	<!-- “該当する商品がありません。” の表示 -->
+	<div  class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
+	<!-- 商品一覧 -->
+	<h2 class="section-title">おすすめアイテム</h2>
+	<div id="productGrid" class="product-grid" th:if="${products != null and #lists.size(products) > 0}">
+	
+	<article class="product-card" th:each="item : ${products}">
+	<!-- 商品詳細ページへのリンク -->
+	<a class="product-thumb" th:href="@{/products/{id}(id=${item['product_id']})}">
+		<!-- 画像URLを th:src にセット（Mapキーはブラケット記法が安全） -->
+		<img th:src="@{/images/products/{fn}(fn=${item['product_image']})}" th:alt="${item['product_name']}" loading="lazy">
+	</a>
+
+	<!-- 商品名 -->
+	<h3 class="name" th:text="${item.product_name}">商品名</h3>
+
+	<!-- 価格 -->
+	<div class="price-area">
+		
+		<!-- 旧価格（値引き >0 の時だけ表示） -->
+		<span class="price-old"
+		th:if="${item.product_discount_price > 0}"
+		th:text="${#numbers.formatInteger(item.product_price, 3, 'COMMA')} + ' 円'"></span>
+		<!-- 現在価格 -->
+		<span class="price-now"
+		th:text="${#numbers.formatInteger(item.product_price - item.product_discount_price, 3, 'COMMA')} + ' 円'"></span>
+		</div>
+		
+		<!-- カートへ追加 -->
+		<form th:action="@{/cart/add}" method="post">
+			</form><input type="hidden" name="productId" th:value="${item['product_id']}">
+			<input type="hidden" name="qty" value="1">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			<button type="submit">カートに追加</button>
+		</form>
+		</article>
+		</div>
+<main></main>
+<script>
+  //  ここからJS
+  const categorySelect = document.getElementById('categorySelect');
+  const productGrid = document.getElementById('productGrid');
+  const messageArea = document.getElementById('messageArea');
+  // 既存のキーワードフォームの値を読み取って併用（SSRを活かす）
+  const keywordInput = document.querySelector('[name="keyword"]');
+
+  // カテゴリ一覧を API から取得して
+  (async function ensureCategories() {
+    // すでに option が1つ（"すべてのカテゴリー"）しか無ければ API から取得
+    if (!categorySelect || categorySelect.options.length > 1) return;
+    try {
+      const res = await fetch('/api/categories', { credentials: 'same-origin' });
+      if (!res.ok) return;
+      const cats = await res.json();
+      for (const c of cats) {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        categorySelect.appendChild(opt);
+      }
+    } catch (e) {
+      console.warn('カテゴリ取得に失敗:', e);
+    }
+  })();
+
+  // Ajax で商品検索（カテゴリ変更時だけ）
+  async function fetchProductsByCategory() {
+    if (!productGrid) return;
+
+    const params = new URLSearchParams();
+    const cat = categorySelect?.value;
+    const kw = keywordInput?.value?.trim();
+
+    if (cat) params.set('categoryId', cat);
+    if (kw)  params.set('keyword', kw); // 既存フォームの入力値を併用
+    params.set('page', '1');
+    params.set('size', '20');
+
+    const url = `/api/products/search?${params.toString()}`;
+    productGrid.classList.add('loading');
+    if (messageArea) messageArea.textContent = '';
+
+    try {
+      const res = await fetch(url, { credentials: 'same-origin' });
+      if (!res.ok) throw new Error('検索に失敗しました');
+      const data = await res.json();
+      renderProducts(data.items || []);
+      if ((!data.items) || data.items.length === 0) {
+        if (messageArea) messageArea.textContent = '該当する商品がありません。';
+      }
+    } catch (e) {
+      console.error(e);
+      if (messageArea) messageArea.textContent = '検索に失敗しました';
+    } finally {
+      productGrid.classList.remove('loading');
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, s => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[s]));
+  }
+
+  function formatYen(n) {
+    const num = Number(n ?? 0);
+    return num.toLocaleString('ja-JP') + ' 円';
+  }
+
+  function renderProducts(items) {
+    // SSR初期表示を置き換えるだけ。最小限のカードHTML（リンク/画像パスはあなたのまま）
+    productGrid.innerHTML = '';
+    for (const it of items) {
+      const id = escapeHtml(it.product_id);
+      const name = escapeHtml(it.product_name);
+      const img = escapeHtml(it.product_image);
+      const price = Number(it.product_price || 0);
+      const discount = Number(it.product_discount_price || 0);
+      const now = price - discount;
+
+      const article = document.createElement('article');
+      article.className = 'product-card';
+      article.innerHTML = `
+        <a class="product-thumb" href="/products/${id}">
+          <img src="/images/products/${img}" alt="${name}" loading="lazy">
+        </a>
+        <h3 class="name">${name}</h3>
+        <div class="price-area">
+          ${discount > 0 ? `<span class="price-old">${formatYen(price)}</span>` : ''}
+          <span class="price-now">${formatYen(now)}</span>
+        </div>
+        <form action="/cart/add" method="post">
+          <input type="hidden" name="productId" value="${id}">
+          <input type="hidden" name="qty" value="1">
+          <!-- CSRFトークンはmetaから取得して埋めてもOK。GETだけなら不要 -->
+          <button type="submit">カートに追加</button>
         </form>
-    </div>
-<!-- “該当する商品がありません。” の表示 -->
-<div class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
+      `;
+      productGrid.appendChild(article);
+    }
+  }
 
-<!-- 既存の一覧 -->
-<div class="product-grid" th:if="${products != null and #lists.size(products) > 0}">
-  <!-- … -->
-</div>
- <!-- カートへ進むボタン -->
-    <a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
-
- <!-- 商品一覧 -->
-   <h2 class="section-title">おすすめアイテム</h2>
-
-<div class="product-grid"
-     th:if="${products != null and #lists.size(products) > 0}"
-     >
-
+  // カテゴリを変更したらAjax検索
+  categorySelect?.addEventListener('change', () => {
+    fetchProductsByCategory();
+  });
+  //ここまでJS
   
-<article class="product-card" th:each="item : ${products}">
-  <!-- 商品詳細ページへのリンク -->
-  <a class="product-thumb"
-     th:href="@{/products/{id}(id=${item['product_id']})}">
-
-    <!-- 画像URLを th:src にセット（Mapキーはブラケット記法が安全） -->
-    <img th:src="@{/images/products/{fn}(fn=${item['product_image']})}"
-         th:alt="${item['product_name']}"
-         loading="lazy">
-  </a>
-
-    <!-- 商品名 -->
-    <h3 class="name" th:text="${item.product_name}">商品名</h3>
-
-    <!-- 価格 -->
-    <div class="price-area">
-
-      <!-- 旧価格（値引き >0 の時だけ表示） -->
-      <span class="price-old"
-            th:if="${item.product_discount_price > 0}"
-            th:text="${#numbers.formatInteger(item.product_price, 3, 'COMMA')} + ' 円'"></span>
-
-      <!-- 現在価格 -->
-      <span class="price-now"
-            th:text="${#numbers.formatInteger(item.product_price - item.product_discount_price, 3, 'COMMA')} + ' 円'"></span>
-    </div>
-
-    <!-- カートへ追加 -->
-     
-     <form th:action="@{/cart/add}" method="post">
-  <input type="hidden" name="productId" th:value="${item['product_id']}">
-  <input type="hidden" name="qty" value="1">
-
-  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-  <button type="submit">カートに追加</button>
-</form>
-
-
-   
-     
-   
-
-  </article>
-</div>
-<main>
-    
-</main>
-
+</script>
 </body>
 </html>

@@ -1,11 +1,13 @@
-/* ページ共通 */
+/* =========================
+   共通
+========================= */
 :root {
   --c-bg: #fafafa;
   --c-text: #222;
   --c-muted: #9a9a9a;
   --c-border: #eee;
-  --c-accent: #000;
-  --c-danger: #e60000;
+  --c-accent: #000;        /* 黒ボタンなどで使用 */
+  --c-danger: #e60000;     /* 値引き価格の赤 */
   --radius: 8px;
 }
 
@@ -20,10 +22,12 @@ body {
   padding: 0;
 }
 
+/* 必要なら本文の左右幅を制御（任意で使う） */
 .container {
-  width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 8px 60px;
+  padding: 20px 12px 60px;
 }
 
 .section-title {
@@ -34,42 +38,20 @@ body {
   padding-left: 12px;
 }
 
-
-/* 行コンテナ：中央揃えの外枠（そのまま） */
+/* =========================
+   トップのアクション部（検索/カテゴリ/カート）
+   ※ 重複定義を統合しました
+========================= */
 .top-actions {
   display: flex;
   justify-content: center;
   padding: 16px 8px;
 }
 
-/* 内枠：Grid で配置 */
 .top-actions .actions-inner {
   display: grid;
-  grid-template-columns: 1fr auto; /* 左は可変余白、右はカート */
-  align-items: center;
-  width: 100%;
-  max-width: 1200px;
-  gap: 16px;
-}
-
-/* 検索ボックス：通常フロー＆中央寄せ */
-.top-actions .search-box {
-  display: flex;
-  gap: 8px;
-  justify-self: center;    /* ★中央固定 */
-}
-
-/* 外枠：中央寄せ */
-.top-actions {
-  display: flex;
-  justify-content: center;
-  padding: 16px 8px;
-}
-
-/* 内枠：中央 1列のグリッド（左右は余白） */
-.top-actions .actions-inner {
-  display: grid;
-  grid-template-columns: 1fr minmax(320px, 600px) 1fr; /* 左余白 | 中央列 | 右余白 */
+  /* 左余白 | 中央列 | 右余白（中央列に検索/カテゴリ/カートを配置） */
+  grid-template-columns: 1fr minmax(320px, 600px) 1fr;
   grid-auto-rows: auto;
   align-items: center;
   width: 100%;
@@ -77,15 +59,13 @@ body {
   gap: 8px 16px; /* 行間 8px / 列間 16px */
 }
 
-/* 検索＝中央列・1行目 */
+/* 1行目＝キーワード検索（中央列） */
 .top-actions .search-box {
   grid-column: 2;
   grid-row: 1;
   display: flex;
   gap: 8px;
 }
-
-/* 入力幅は中央列に合わせる */
 .top-actions .search-box input[type="text"] {
   width: 100%;
   max-width: 560px;
@@ -108,12 +88,36 @@ body {
 }
 .top-actions .search-box button:hover { opacity: .85; }
 
-/* カート＝中央列・2行目の右端（検索の右下） */
-.go-cart-btn {
-  grid-column: 2;
+/* 2行目＝左側：カテゴリ（ピルUI） */
+.category-filter {
+  grid-column: 2;   /* 中央列 */
   grid-row: 2;
-  justify-self: end;  /* 右端に揃える */
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* クリックしやすさ＆重なり対策 */
+.category-filter select {
+  appearance: none;            /* モダン外観（必要なければ削除） */
+  -webkit-appearance: none;
+  padding: 10px 14px;
+  min-width: 260px;
+  border: 1px solid #ddd;
+  border-radius: 999px;        /* ピル（丸） */
+  background: #fff url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center / 10px 6px;
+  color: #555;
+  position: relative;          /* z-index を効かせるために相対配置に */
+  z-index: 1;                  /* ドロップダウンが隠れないよう予防 */
+  cursor: pointer;
+}
+.category-filter label { color: var(--c-muted); font-size: 14px; }
 
+/* 2行目＝右側：カートボタン（黒） */
+.go-cart-btn {
+  grid-column: 2;   /* 中央列 */
+  grid-row: 2;
+  justify-self: end;      /* 右端に吸着 */
   display: inline-block;
   min-width: 180px;
   background: var(--c-accent);
@@ -127,51 +131,23 @@ body {
 }
 .go-cart-btn:hover { opacity: .85; }
 
-/* ▼ ここがポイント：おすすめ見出しと商品グリッドは「全幅」で3行目以降へ */
+/* 3行目以降＝見出しとグリッドを全幅に */
 .section-title {
-  grid-column: 1 / -1; /* 左～右余白を含めて全幅に広げる */
-  grid-row: 3;         /* カート(2行目)の下に来る */
-  font-size: 24px;
-  font-weight: 700;
+  grid-column: 1 / -1; /* 左～右余白を含めて全幅 */
+  grid-row: 3;
   margin: 24px 0 12px;
-  border-left: 6px solid var(--c-accent);
-  padding-left: 12px;
 }
-
 .product-grid {
-  grid-column: 1 / -1; /* 全幅 */
-  grid-row: 4;         /* 見出しのさらに下 */
+  grid-column: 1 / -1;
+  grid-row: 4;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 横4列 */
   gap: 28px;
 }
 
-/* レスポンシブ（スマホ幅では中央列を柔軟に） */
-@media (max-width: 992px) {
-  .top-actions .actions-inner {
-    grid-template-columns: 1fr minmax(260px, 1fr) 1fr;
-    gap: 8px 12px;
-  }
-  /* ボタンは中央にしたいなら以下をON、右端のままが良ければ削除 */
-  /* .go-cart-btn { justify-self: center; } */
-  .product-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 768px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 520px) {
-  .product-grid { grid-template-columns: 1fr; }
-}
 /* =========================
-   4列グリッド
+   商品カード
 ========================= */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ★ 横4列 */
-  gap: 28px;                              /* スクショ寄せて少し広め */
-}
-
-/* カード */
 .product-card {
   background: #fff;
   border-radius: var(--radius);
@@ -183,17 +159,15 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.10);
 }
-
-/* サムネイル */
 .product-thumb { display:block; position: relative; }
 .product-thumb img {
   width: 100%;
-  aspect-ratio: 4 / 3;     /* 4:3 に揃える */
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
 }
 
-/* 左上の角ロゴ（任意） */
+/* 角ロゴ（任意） */
 .thumb-badge {
   position: absolute;
   left: 10px;
@@ -208,24 +182,19 @@ body {
   text-align: center;
 }
 
-/* 情報部 */
-.product-info {
-  padding: 12px 12px 14px;
-}
+.product-info { padding: 12px 12px 14px; }
 
-/* 商品名：2行で省略（スクショ風） */
 .name {
   font-size: 14px;
   line-height: 1.5;
   font-weight: 600;
   margin: 8px 0 10px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;    /* 2行で切る */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* 価格：旧価格（グレー取り消し） + 新価格（赤太字） */
 .price-area {
   display: flex;
   align-items: baseline;
@@ -240,12 +209,11 @@ body {
 .price-now {
   color: var(--c-danger);
   font-weight: 900;
-  font-size: 20px;          /* 少し大きめで強調 */
+  font-size: 20px;
 }
 
-/* カートボタン（カード下部） */
+/* 追加ボタン */
 .card-actions { margin-top: 4px; }
-
 .cart-btn {
   display: inline-block;
   width: 100%;
@@ -258,15 +226,11 @@ body {
   transition: .15s ease;
   border: 1px solid transparent;
 }
-
-/* 未追加：黒ボタン */
 .cart-btn--add {
   background: #000;
   color: #fff;
 }
 .cart-btn--add:hover { opacity: .85; }
-
-/* 追加済み：薄グレー（非活性見た目） */
 .cart-btn--added {
   background: #e5e5e5;
   color: #333;
@@ -274,16 +238,23 @@ body {
   cursor: default;
 }
 
-/* レスポンシブ */
+/* =========================
+   レスポンシブ
+========================= */
 @media (max-width: 1280px) {
-  .container { width: 96%; }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 992px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); } /* 3列 */
+  .top-actions .actions-inner {
+    grid-template-columns: 1fr minmax(260px, 1fr) 1fr; /* 中央列を柔軟に */
+  }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 768px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); } /* 2列 */
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 520px) {
-  .product-grid { grid-template-columns: 1fr; }            /* 1列 */
+  .product-grid { grid-template-columns: 1fr; }
+  /* モバイル時はカテゴリとカートを縦積みにしたい場合 */
+  /* .go-cart-btn { justify-self: stretch; } */
 }

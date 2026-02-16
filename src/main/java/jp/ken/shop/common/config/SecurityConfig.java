@@ -2,6 +2,7 @@ package jp.ken.shop.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
@@ -35,8 +36,13 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 			  
 			
 			  http.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/favicon.ico","/products","/login","/top","/shop/registerform","/","/error").permitAll()
-					.requestMatchers("/css/**","/images/**", "/js/**").permitAll()
+					.requestMatchers("/products/**","/favicon.ico","/products","/login","/top","/shop/registerform","/","/error").permitAll()
+					.requestMatchers("/css/**","/images/**", "/js/**","/webjars/**").permitAll()
+
+					 // API（カテゴリ一覧・検索）は未ログインでも使えるように
+					.requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/products/search").permitAll()
+
 					.anyRequest().authenticated());
 			
 				http.formLogin(login -> login
