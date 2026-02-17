@@ -14,16 +14,15 @@ public class CartService {
 	public static final String SESSION_KEY = "cart";
 
 	public final CartRepository cartRepository;
-	
 
 	public CartService(CartRepository cartRepository) {
 		this.cartRepository = cartRepository;
 	}
-	public void deleteItem(HttpSession session, String productId) {
-	    CartEntity cart = getOrCreate(session);
-	    cart.getItems().removeIf(it -> it.getProductId().equals(productId));
-	}
 
+	public void deleteItem(HttpSession session, String productId) {
+		CartEntity cart = getOrCreate(session);
+		cart.getItems().removeIf(it -> it.getProductId().equals(productId));
+	}
 
 	public CartEntity getOrCreate(HttpSession session) {
 		CartEntity cart = (CartEntity) session.getAttribute(SESSION_KEY);
@@ -60,7 +59,24 @@ public class CartService {
 
 		cart.getItems().add(item);
 	}
-	
 
+	//プルダウン追加
+	public void updateQty(HttpSession session, String productId, int qty) {
+		if (qty < 1 || qty > 10) {
+			throw new IllegalArgumentException("数量は1〜10の範囲で指定してください。");
+		}
+		CartEntity cart = getOrCreate(session);
+		boolean found = false;
+		for (CartItemEntity item : cart.getItems()) {
+			if (item.getProductId().equals(productId)) {
+				item.setQty(qty);
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			throw new IllegalArgumentException("カート内に商品が見つかりません： " + productId);
+		}
+	}
 
 }
