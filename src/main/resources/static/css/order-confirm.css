@@ -77,15 +77,25 @@ body{
   padding:10px 18px;
 }
 .btn--primary{
-  background:#111;
+  background:#000;
   color:#fff;
-  border-color:#111;
-  width: 280px;
-  padding: 14px 18px;
-  font-size:14px;
-  letter-spacing:0.5px;
+  border:none;
+
+  width:100%;
+  padding:22px 0;
+
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:1px;
+
+  border-radius:4px;
+  cursor:pointer;
 }
-.btn--primary:hover{ opacity:0.92; }
+
+.btn--primary:hover{
+  opacity:0.85;
+}
+
 
 /* ITEMS */
 .items{
@@ -163,7 +173,7 @@ body{
 }
 .summary__grid{
   display:grid;
-  grid-template-columns: 1fr 140px;
+  grid-template-columns: 1fr 280px;
   gap: 14px;
   align-items:start;
 }
@@ -225,7 +235,7 @@ body{
   display:flex;
   flex-direction:column;
   justify-content:center;
-  align-items:center;
+  align-items:stretch;
   gap: 8px;
 }
 .pointBox__label{
@@ -258,3 +268,25 @@ body{
   background: #f5f5f5;   /* 画像ない時の色 */
 }
 
+
+.btn-primary-wide{
+  display:block;
+  width:100%;
+
+  background:#000;
+  color:#fff;
+  text-align:center;
+  text-decoration:none;
+
+  padding:22px 0;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:1px;
+
+  border-radius:4px;
+  transition:opacity .2s;
+}
+
+.btn-primary-wide:hover{
+  opacity:0.85;
+}

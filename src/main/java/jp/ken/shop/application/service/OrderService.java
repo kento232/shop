@@ -37,12 +37,17 @@ public class OrderService {
     public int createOrder(HttpSession session, int memberId) {
 
         CartEntity cart = cartService.getOrCreate(session);
+
         if (cart.getItems() == null || cart.getItems().isEmpty()) {
             throw new IllegalStateException("カートが空です");
         }
 
-        // ★ アプリ側で注文番号を採番
         int purchaseId = purchaseRepository.nextPurchaseId();
+
+        LocalDate purchaseDay = LocalDate.now();
+
+        // ⭐ 発送予定日を自動決定（例：3日後）
+        LocalDate sendScheduleDay = purchaseDay.plusDays(3);
 
         int lineNo = 1;
 
@@ -52,13 +57,13 @@ public class OrderService {
                     purchaseId,
                     lineNo,
                     memberId,
-                    LocalDate.now(),
+                    purchaseDay,
                     item.getProductId(),
                     item.getQty(),
-                    "1",     // 支払方法（例：1=クレカ）
-                    "0",     // 通常配送
-                    null,
-                    null
+                    "1",   // 支払方法（仮）
+                    "0",   // 通常配送
+                    sendScheduleDay,  // ★ここが重要（null禁止）
+                    null              // sent_day は未発送なのでOK
             );
 
             lineNo++;
@@ -68,6 +73,7 @@ public class OrderService {
 
         return purchaseId;
     }
+
 
 
     public String formatOrderNo(int purchaseId) {
@@ -81,4 +87,6 @@ public class OrderService {
         }
         return sum;
     }
+    
+    
 }

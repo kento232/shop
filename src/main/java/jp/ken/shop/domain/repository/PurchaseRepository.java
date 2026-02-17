@@ -25,7 +25,7 @@ public class PurchaseRepository {
      * 本番ならDBシーケンス/採番テーブル/UUID等が推奨。
      */
     public int nextPurchaseId() {
-        String sql = "SELECT COALESCE(MAX(purchase_id), 0) + 1 FROM purchase";
+        String sql = "SELECT COALESCE(MAX(purchase_id), 0) + 1 FROM t_product_send";
         Integer next = jdbc.queryForObject(sql, Integer.class);
         return (next == null) ? 1 : next;
     }
@@ -47,7 +47,7 @@ public class PurchaseRepository {
             LocalDate sentDay
     ) {
         String sql = """
-            INSERT INTO purchase (
+            INSERT INTO t_product_send (
               purchase_id,
               purchase_id_number,
               member_id,
@@ -89,9 +89,10 @@ public class PurchaseRepository {
             String designation,
             LocalDate sendScheduleDay
     ) {
-        if (lines == null || lines.isEmpty()) {
-            throw new IllegalArgumentException("lines is empty");
-        }
+        if (lines == null || lines.isEmpty()) throw new IllegalArgumentException("lines is empty");
+
+        // ここを追加：nullなら購入日を発送予定日にする（例）
+        LocalDate schedule = (sendScheduleDay != null) ? sendScheduleDay : purchaseDay;
 
         int purchaseId = nextPurchaseId();
 
@@ -106,7 +107,7 @@ public class PurchaseRepository {
                     line.qty(),
                     memberPayment,
                     designation,
-                    sendScheduleDay,
+                    schedule, // ← nullじゃない値を渡す
                     null
             );
             lineNo++;
@@ -114,11 +115,12 @@ public class PurchaseRepository {
         return purchaseId;
     }
 
+
     /**
      * 存在チェック（必要なら）
      */
     public boolean exists(int purchaseId) {
-        String sql = "SELECT COUNT(*) FROM purchase WHERE purchase_id = ?";
+        String sql = "SELECT COUNT(*) FROM t_product_send WHERE purchase_id = ?";
         Integer cnt = jdbc.queryForObject(sql, Integer.class, purchaseId);
         return cnt != null && cnt > 0;
     }
@@ -127,7 +129,7 @@ public class PurchaseRepository {
      * 発送済日に更新（必要なら）
      */
     public int markSent(int purchaseId, LocalDate sentDay) {
-        String sql = "UPDATE purchase SET sent_day = ? WHERE purchase_id = ?";
+        String sql = "UPDATE t_product_send SET sent_day = ? WHERE purchase_id = ?";
         return jdbc.update(sql, Date.valueOf(sentDay), purchaseId);
     }
 
@@ -147,7 +149,7 @@ public class PurchaseRepository {
               designation,
               send_schedule_day,
               sent_day
-            FROM purchase
+            FROM t_product_send
             WHERE purchase_id = ?
               AND purchase_id_number = ?
             """;

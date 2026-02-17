@@ -81,7 +81,7 @@ public class OrderController {
 
 	@GetMapping("/complete")
 	public String complete(Model model) {
-		return "order/purchaseCompletion";
+		return "/purchaseCompletion";
 	}
 
 	private int calcTotal(CartEntity cart) {

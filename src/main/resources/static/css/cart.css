@@ -1,147 +1,262 @@
+/* cart.css */
+
+/* ===== Base ===== */
 * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-  color: #111;
-  background: #fafafa;
-}
-
-.container {
-  max-width: 1100px;
+.container{
+  max-width: 980px;
   margin: 0 auto;
-  padding: 18px 16px 40px;
+  padding: 22px 18px 40px;
 }
 
-.page-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.page-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   gap: 12px;
-  margin: 16px 0;
+  margin: 10px 0 18px;
 }
 
-.page-title {
-  margin: 0;
+.page-title{
+  margin:0;
   font-size: 22px;
+  font-weight: 800;
+  letter-spacing: .2px;
 }
 
-.back-btn {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.notice {
-  margin: 12px 0 16px;
-  padding: 12px 14px;
-  background: #fff4e5;
-  border: 1px solid #ffd7a8;
-  border-radius: 12px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 16px;
-}
-
-.list {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.empty {
-  margin: 0;
-  padding: 18px;
-  color: #666;
-}
-
-.item {
-  display: grid;
-  grid-template-columns: 90px 1fr 140px;
-  gap: 14px;
-  padding: 12px;
-  border-radius: 12px;
-}
-
-.item + .item {
-  border-top: 1px solid #f0f0f0;
-}
-
-.thumb img {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 12px;
-  background: #f3f3f3;
-}
-
-.item-name {
-  margin: 0 0 10px;
-  font-weight: 700;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.qty {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.qty select {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: #fff;
-}
-
-.delete-btn {
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 10px;
-}
-
-.item-price {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-weight: 700;
-}
-
-.side-card {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  padding: 12px;
-  position: sticky;
-  top: 70px;
-}
-
-.proceed {
-  width: 100%;
-  padding: 12px 14px;
-  border: none;
-  border-radius: 12px;
-  background: #111;
-  color: #fff;
-  font-weight: 700;
-}
-
-.site-footer {
-  margin-top: 20px;
-  text-align: center;
-  color: #888;
+.back-btn{
+  appearance:none;
+  border:1px solid #d8d6cf;
+  background:#fff;
+  color:#111;
+  border-radius: 999px;
+  padding: 10px 14px;
   font-size: 12px;
+  cursor:pointer;
+}
+.back-btn:hover{ opacity:.92; }
+
+/* notice（赤文字っぽく） */
+.notice{
+  margin: 0 0 14px;
+  color: #d01616;
+  font-weight: 800;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ===== Layout ===== */
+.layout{
+  display:grid;
+  grid-template-columns: 1fr 260px;
+  gap: 18px;
+  align-items:start;
+}
+
+/* ===== Left list panel ===== */
+.list{
+  background: transparent;
+  border:1px solid #e6e3dc;
+  border-radius: 14px;
+  padding: 16px 16px 8px;
+}
+
+/* empty */
+.empty{
+  margin: 0;
+  padding: 18px 10px;
+  color:#6f6a62;
+  font-size: 13px;
+}
+
+/* ===== Item row ===== */
+.item{
+  display:grid;
+  grid-template-columns: 140px 1fr 120px;
+  gap: 14px;
+  padding: 16px 6px;
+  border-bottom: 1px solid #ece9e2;
+  align-items:center;
+}
+
+.item:last-child{
+  border-bottom:none;
+}
+
+.thumb{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:1px solid #ece9e2;
+  border-radius: 10px;
+  padding: 10px;
+  height: 120px;
+}
+
+.thumb img{
+  width: 110px;
+  height: 90px;
+  object-fit: contain;
+  display:block;
+}
+
+.item-main{
+  min-width: 0;
+}
+
+.item-name{
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+/* controls row */
+.controls{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* qty pill */
+.qty{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+}
+
+.qty select{
+  appearance:none;
+  border:1px solid #d8d6cf;
+  background:#f5f4f0;
+  border-radius: 999px;
+  padding: 6px 30px 6px 12px;
+  font-size: 12px;
+  cursor:pointer;
+  position: relative;
+}
+
+/* select ▼（簡易） */
+.qty{
+  position: relative;
+}
+.qty::after{
+  content:"▾";
+  position:absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color:#666;
+  pointer-events:none;
+}
+
+.unit{
+  font-size: 12px;
+  color:#444;
+}
+
+/* delete button (orange like screenshot) */
+.delete-btn{
+  appearance:none;
+  border:1px solid #d99a2a;
+  background:#d99a2a;
+  color:#fff;
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 4px;
+  padding: 7px 10px;
+  cursor:pointer;
+}
+.delete-btn:hover{ opacity:.92; }
+
+/* price column */
+.item-price{
+  display:flex;
+  justify-content:flex-end;
+  align-items:baseline;
+  gap: 4px;
+  font-weight: 900;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* optional subtotal line (hide by default to keep screenshot look) */
+.item-subtotal{
+  grid-column: 2 / -1;
+  margin-top: 6px;
+  color:#6f6a62;
+  font-size: 12px;
+  display:none;
+}
+
+/* ===== Right side ===== */
+.side{
+  position: relative;
+}
+
+.side-card{
+  background:#fff;
+  border:1px solid #e6e3dc;
+  border-radius: 14px;
+  padding: 14px;
+  position: sticky;
+  top: 78px;
+}
+
+/* summary texts */
+.summary{
+  font-size: 13px;
+  line-height: 1.9;
+  margin-bottom: 12px;
+}
+
+.summary strong{
+  font-size: 14px;
+}
+
+/* ===== Primary button (black wide) ===== */
+.btn.btn--primary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width: 100%;
+  height: 54px;
+  border-radius: 10px;
+  background:#111;
+  color:#fff;
+  text-decoration:none;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: .6px;
+  border: none;
+}
+.btn.btn--primary:hover{ opacity:.92; }
+
+/* ===== Footer ===== */
+.site-footer{
+  margin-top: 18px;
+  text-align:center;
+  color:#8b857c;
+  font-size: 11px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 860px){
+  .layout{
+    grid-template-columns: 1fr;
+  }
+  .side-card{
+    position: static;
+  }
+  .item{
+    grid-template-columns: 120px 1fr;
+  }
+  .item-price{
+    grid-column: 2 / -1;
+    justify-content:flex-end;
+    margin-top: 6px;
+  }
 }
