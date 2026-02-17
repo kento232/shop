@@ -1,5 +1,4 @@
 package jp.ken.shop.common.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,7 +16,11 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 	@Configuration
 	public class SecurityConfig {
 		
+		private final LoginSuccessHandler loginSuccessHandler;
 		
+		public SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
+			this.loginSuccessHandler = loginSuccessHandler;
+		}
 		  @Bean
 		   PasswordEncoder passwordEncoder() {
 		        return new BCryptPasswordEncoder();
@@ -50,7 +53,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 					.loginProcessingUrl("/perform_login") //Controller から forward される
 					.usernameParameter("loginInput")
 					.passwordParameter("memberPassword")
-					.defaultSuccessUrl("/top", true)
+					.successHandler(loginSuccessHandler)
 					.failureUrl("/login?error") 
 					
 					)

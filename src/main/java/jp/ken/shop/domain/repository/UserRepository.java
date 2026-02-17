@@ -69,6 +69,26 @@ public class UserRepository {
 
         return keyHolder.getKey().intValue();
     }
+    public Integer findMemberIdByEmail(String email) {
+        List<UserEntity> list = findByMemberEmail(email);
+        if (list.isEmpty()) return null;
+        return list.get(0).getMemberId();
+    }
+    public Integer findMemberIdByLoginInput(String loginInput) {
+        if (loginInput == null || loginInput.isBlank()) return null;
+
+        // 数字だけなら会員IDとして扱う
+        if (loginInput.matches("\\d+")) {
+            List<UserEntity> list = findByMemberId(Integer.parseInt(loginInput));
+            if (list.isEmpty()) return null;
+            return list.get(0).getMemberId();
+        }
+
+        // それ以外はメールとして扱う
+        return findMemberIdByEmail(loginInput);
+    }
+
+
 
 
 

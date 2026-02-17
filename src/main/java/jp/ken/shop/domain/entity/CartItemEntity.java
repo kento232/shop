@@ -10,7 +10,7 @@ public class CartItemEntity {
 	private int price;
 	private String productImage;
 	private int qty;
-	
+
 	public int getSubtotal() {
 		return price * qty;
 	}

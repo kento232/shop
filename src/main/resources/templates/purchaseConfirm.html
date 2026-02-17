@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>商品購入確認</title>
+	<link rel="stylesheet" th:href="@{/css/order-confirm.css}" href="/css/order-confirm.css">
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+
+<body>
+	<div th:replace="~{header :: header}"></div>
+
+
+	<main class="page">
+		<div class="page__inner">
+
+			<div class="page__top">
+				<h1 class="page__title">商品購入確認</h1>
+
+				<a class="btn btn--pill" th:href="@{/cart}" href="/cart">前画面に戻る</a>
+			</div>
+
+			<!-- 商品リスト -->
+			<section class="items">
+				<article class="item" th:each="item : ${cartItems}">
+					<div class="item__left">
+						<img class="product-thumb"
+						th:src="@{/images/products/{img}(img=${item.productImage})}" alt="商品画像">
+						<div class="item__info">
+							<div class="item__name" th:text="${item.productName}">引き出し付きハイタイプ壁面収納（120 WH）</div>
+							<div class="item__sub" th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')} + ' 円'">
+								22,900 円</div>
+						</div>
+					</div>
+
+					<div class="item__right">
+						<div class="item__qty">
+							<span class="item__qtyLabel">個</span>
+							<span class="item__qtyValue" th:text="${item.qty}">1</span>
+						</div>
+						<div class="item__price"
+							th:text="${#numbers.formatInteger(item.price * item.qty, 0, 'COMMA')} + ' 円'">
+							22,900 円
+						</div>
+					</div>
+				</article>
+
+				<!-- cartItemsが空のとき（任意） -->
+				<div class="empty" th:if="${cartItems == null or #lists.isEmpty(cartItems)}">
+					カートに商品がありません。
+				</div>
+			</section>
+
+			<!-- 下部：合計＆ポイント -->
+			<section class="summary">
+				<div class="summary__grid">
+
+					<!-- 左：明細 -->
+					<div class="bill">
+
+						<div class="bill__row">
+							<div class="bill__label">合計金額</div>
+							<div class="bill__value"
+								th:text="${#numbers.formatInteger(totalAmount, 0, 'COMMA')} + ' 円'">74,447 円</div>
+						</div>
+
+						<!-- ポイントは未実装なので0固定 -->
+						<div class="bill__row">
+							<div class="bill__label">購入後獲得予定ポイント</div>
+							<div class="bill__value">0 pt</div>
+						</div>
+
+						<div class="bill__row">
+							<div class="bill__label">今回使用ポイント</div>
+							<div class="bill__value">
+								<span class="pill">1pt〜100pt</span>
+								<span class="muted">0 pt</span>
+							</div>
+						</div>
+
+						<div class="bill__row">
+							<div class="bill__label">使用ポイント総額</div>
+							<div class="bill__value bill__value--minus">- 0 円</div>
+						</div>
+
+						<div class="bill__row">
+							<div class="bill__label">今回購入合計金額</div>
+							<div class="bill__value"
+								th:text="${#numbers.formatInteger(totalAmount, 0, 'COMMA')} + ' 円'">74,447 円</div>
+						</div>
+
+						<div class="bill__row">
+							<div class="bill__label">送料</div>
+							<div class="bill__value muted">オープンキャンペーンにより無料</div>
+						</div>
+
+						<div class="bill__divider"></div>
+
+						<div class="bill__row bill__row--total">
+							<div class="bill__label">請求額</div>
+							<div class="bill__value bill__value--big"
+								th:text="${#numbers.formatInteger(totalAmount, 0, 'COMMA')} + ' 円'">
+								74,447 円
+							</div>
+						</div>
+
+					</div>
+
+					<!-- 右：ポイントBOX（未実装なので見た目だけ） -->
+					<aside class="pointBox" aria-label="ポイント">
+						<div class="pointBox__label">ポイント</div>
+						<div class="pointBox__value">0 pt</div>
+					</aside>
+
+				</div>
+
+				<!-- ボタン -->
+				<div class="actions">
+					<form th:action="@{/order/submit}" action="/order/submit" method="post">
+						<button type="submit" class="btn btn--primary">購入完了画面へ</button>
+					</form>
+				</div>
+			</section>
+
+			<footer class="footer">
+				© KEN INTERIOR SHOP
+			</footer>
+		</div>
+	</main>
+</body>
+
+</html>
