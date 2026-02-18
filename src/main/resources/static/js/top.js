@@ -135,9 +135,10 @@ function renderProducts(items) {
       <form action="/cart/add" method="post">
         <input type="hidden" name="productId" value="${id}">
         <input type="hidden" name="qty" value="1">
+        <input type="hidden" name="_csrf" value="${csrfToken}">
         <!-- hidden CSRF は SSR がないケースに備え、meta 補完するので未挿入でもOK -->
         <button
-          type="button"
+          type="submit"
           class="js-add-to-cart-btn"
           data-product-id="${id}"
         >
@@ -199,130 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * application/x-www-form-urlencoded で /cart/add にPOSTする
  */
 // --- カート追加（document へのイベント委譲で確実に拾う／LOG付き） ---
-function bindCartAddHandler() {
-  document.addEventListener('click', async (e) => {
-    // クリックが拾えているかの一次確認
-    // console.log('[cart] click captured on document', e.target);
-
-    const btn = e.target.closest && e.target.closest('.js-add-to-cart-btn');
-    if (!btn) return; // 他のクリックは無視
-    // ここに来ていればボタンは拾えている
-    console.log('[cart] button matched', btn);
-
-    if (btn.disabled) {
-      console.log('[cart] button is disabled → return');
-      return;
-    }
-
-    const form = btn.closest('form');
-    if (!(form instanceof HTMLFormElement)) {
-      console.warn('[cart] no form found for button');
-      return;
-    }
-
-    const action = form.getAttribute('action') || '';
-    if (!/\/cart\/add(?:$|\?)/.test(action)) {
-      console.warn('[cart] action not match:', action);
-      return;
-    }
-
-    // UIロック
-    btn.disabled = true;
-    const originalText = btn.textContent || 'カートに追加';
-    btn.textContent = '追加中…';
-    btn.classList.add('is-loading');
-    btn.setAttribute('aria-busy', 'true');
-
-    try {
-      // FormData → x-www-form-urlencoded
-      const fd = new FormData(form);
-
-      // CSRF（hidden が無い場合は meta から補完）
-      const metaToken = document.querySelector('meta[name="_csrf"]')?.content || '';
-      const metaParam  = document.querySelector('meta[name="_csrf_parameter"]')?.content || '_csrf';
-      if (metaToken && !fd.has(metaParam)) {
-        fd.append(metaParam, metaToken);
-      }
-
-      const body = new URLSearchParams();
-      for (const [k, v] of fd.entries()) {
-        body.append(k, typeof v === 'string' ? v : '');
-      }
-
-      // ヘッダ（CSRF はヘッダにも載せる）
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        'Accept': 'application/json',
-      };
-      const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]')?.content || 'X-CSRF-TOKEN';
-      if (metaToken && csrfHeaderName) headers[csrfHeaderName] = metaToken;
-
-      console.log('[cart] POST', action, { headers: { ...headers, 'X-CSRF-TOKEN': undefined }});
-
-      const res = await fetch(action, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers,
-        body
-      });
-
-      // 成功/失敗判定
-      if (res.status === 403) {
-        throw new Error('セキュリティによりブロックされました（CSRF）。ページを再読み込みして再試行してください。');
-      }
-
-      if (res.redirected) {
-        const u = new URL(res.url, location.origin);
-        console.log('[cart] redirected to', u.href);
-        if (u.pathname.startsWith('/login')) {
-          throw new Error('ログインが必要です。');
-        } else if (u.pathname.startsWith('/cart')) {
-          // 正常系：フォーム送信相当の 302→/cart
-          // Ajax上では成功扱いにして画面はそのまま
-        } else {
-          throw new Error('想定外の遷移が発生しました。');
-        }
-      } else if (!res.ok) {
-        throw new Error(`カート追加に失敗しました（HTTP ${res.status}）`);
-      } else {
-        const ct = res.headers.get('content-type') || '';
-        if (ct.includes('application/json')) {
-          const json = await res.json();
-          console.log('[cart] response json', json);
-          if (json?.success === false) {
-            throw new Error(json?.message || 'カート追加に失敗しました。');
-          }
-        }
-      }
-
-      // 成功UI
-      btn.textContent = 'カート追加済み';
-      btn.classList.remove('is-loading');
-      btn.classList.add('is-added');
-      btn.setAttribute('aria-pressed', 'true');
-      btn.removeAttribute('aria-busy');
-      btn.disabled = true;
-
-      if (messageArea) messageArea.textContent = 'カートに追加しました';
-      if (window.CartBadge && typeof window.CartBadge.refresh === 'function') {
-        window.CartBadge.refresh();
-      }
-
-    } catch (err) {
-      console.error('[cart] error', err);
-      // 失敗UIへ戻す
-      btn.disabled = false;
-      btn.classList.remove('is-loading');
-      btn.removeAttribute('aria-busy');
-      btn.textContent = originalText;
-      if (messageArea) {
-        messageArea.innerHTML = `<span class="error">${escapeHtml(err.message || 'カートに追加できませんでした')}</span>`;
-      }
-      // 未ログイン時にログインへ誘導したい場合の例：
-      // if ((err.message || '').includes('ログインが必要')) location.href = '/login';
-    }
-  });
-}
+ 
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', bindCartAddHandler);

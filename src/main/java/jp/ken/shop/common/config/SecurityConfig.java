@@ -56,8 +56,11 @@ public class SecurityConfig {
 				.requestMatchers("/products/**", "/favicon.ico", "/products", "/login", "/top", "/shop/registerform",
 						"/", "/error", "/confirm")
 				.permitAll()
+				.requestMatchers("/cart/add").permitAll()
+				.requestMatchers("/cart").permitAll()
 				.requestMatchers("/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
-				.requestMatchers("/shop/confirm").permitAll()
+				.requestMatchers(HttpMethod.POST, "/cart/add").permitAll()
+
 				.requestMatchers(HttpMethod.POST, "/shop/register").permitAll()
 				// API（カテゴリ一覧・検索）は未ログインでも使えるように
 				.requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
@@ -87,7 +90,7 @@ public class SecurityConfig {
 						.maximumSessions(1)
 						.maxSessionsPreventsLogin(true)
 						.sessionRegistry(sessionRegistry())));
-
+		http.csrf(csrf -> csrf.ignoringRequestMatchers("/cart/add"));
 		http
 				.securityContext(context -> context
 						.securityContextRepository(securityContextRepository()));
