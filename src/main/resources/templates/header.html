@@ -24,12 +24,19 @@
 
 				<!-- カート（SVG + バッジ） -->
 				<a th:href="@{/cart}" class="cart">
-					<!-- 0件のときは is-hidden を付与してCSSで非表示 -->
+					<!-- 0件のときは is-hidden を付与してCSSで非表示 
 					<span class="cart-count" th:text="${session.cartCount} ?: 0"
 						th:classappend="(${session.cartCount} ?: 0) == 0 ? ' is-hidden' : ''"
 						th:attr="aria-label=|カート内は${(session.cartCount ?: 0)}点です|">
 						0
-					</span>
+					</span>-->
+					<!-- header.html -->
+					<span
+					  id="cart-count-badge"
+					  class="cart-count"
+					  th:text="${session.cartCount} ?: 0"
+					  th:attr="aria-label=|カート内は${(session.cartCount ?: 0)}点です|, hidden=${(session.cartCount ?: 0) == 0 ? 'hidden' : null}"
+					>0</span>
 					<img th:src="@{/images/icon_cart_black.svg}" alt="cart" class="cart-icon">
 				</a>
 

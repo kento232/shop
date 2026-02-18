@@ -102,6 +102,7 @@
   border-radius: 8px;
   background: #fff;
   border: 1px solid #eee;
+  overflow: visible; /* ← バッジが外にはみ出るので必要 */
 
   transition: box-shadow .2s ease, transform .02s ease;
 }
@@ -116,6 +117,35 @@
 }
 
 /* 個数バッジ（右上） */
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e60000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+/* ★ カート数 0 のとき非表示用クラス */
+.cart-count.is-hidden {
+  display: none !important;
+}
 
 /* バッジ：右上の角に固定してから 50% 分だけ外へ出す */
 .cart-count {

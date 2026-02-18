@@ -6,10 +6,10 @@
 	// 設定（必要に応じて変更）
 
 	var CONFIG = {
-		countUrl: '/api/cart/count',
-		addUrl: '/api/cart/items',
+		countUrl: '/cart/api/count',
+		//addUrl: '/api/cart/items',
 		badgeSelector: '#cart-count-badge',
-		addButtonSelector: '[data-product-id]', // 既存のクラスならここを置換
+		addButtonSelector: '',  // 既存のクラスならここを置換
 		qtyAttr: 'data-qty',
 		productIdAttr: 'data-product-id',
 		showZero: false,       // 0 のとき非表示（false）/ 表示（true）
@@ -150,6 +150,7 @@
 	// イベント・初期化
 
 	function bindAddButtons() {
+		if (!CONFIG.addButtonSelector) return;
 		$all(CONFIG.addButtonSelector).forEach(function(btn) {
 			if (btn.__cartBound) return;
 			btn.__cartBound = true;

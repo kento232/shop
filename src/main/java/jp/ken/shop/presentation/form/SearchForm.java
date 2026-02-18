@@ -10,4 +10,5 @@ public class SearchForm {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 		}
+	
 }

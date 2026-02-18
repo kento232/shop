@@ -270,4 +270,3 @@ select:focus, input:focus { border-color: var(--focus); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
-``

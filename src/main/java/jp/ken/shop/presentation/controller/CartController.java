@@ -1,5 +1,8 @@
 package jp.ken.shop.presentation.controller;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +31,15 @@ class CartController {
 	public CartController(CartService cartService) {
 		this.cartService = cartService;
 	}
+
+	@GetMapping("/api/count")
+	@ResponseBody
+	public Map<String, Integer> getCountInCartPrefix(HttpSession session) {
+	    CartEntity cart = cartService.getOrCreate(session);
+	    int count = Math.max(0, cart.getCount());
+	    return Collections.singletonMap("count", count);
+	}
+	
 
 	@GetMapping
 
@@ -102,7 +114,7 @@ class CartController {
 		}
 	}
 
-	/** ★ AJAX用 数量更新（/cart/api/items/{productId}/quantity） */
+	/** AJAX用 数量更新（/cart/api/items/{productId}/quantity） */
 	@PostMapping("/api/items/{productId}/quantity")
 	@ResponseBody
 	public ResponseEntity<?> updateQuantityApi(
