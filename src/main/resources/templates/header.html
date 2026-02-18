@@ -8,7 +8,7 @@
 			<!-- 左：ロゴ（SVG） -->
 			<div class="header-left">
 
-				<a th:href="@{/shop}" class="site-logo">
+				<a th:href="@{/top}" class="site-logo">
 					<img th:src="@{/images/logo_01_black.svg}" alt="KEN INTERIOR SHOP" class="site-logo__img">
 				</a>
 
@@ -21,6 +21,8 @@
 
 			<!-- 右：アクション群 -->
 			<div class="header-right">
+				<p th:if="${session.loginUser != null}"> ようこそ、<span th:text="${session.loginUser.memberName}"></span> さん
+				</p>
 
 				<!-- カート（SVG + バッジ） -->
 				<a th:href="@{/cart}" class="cart">
@@ -31,18 +33,13 @@
 						0
 					</span>-->
 					<!-- header.html -->
-					<span
-					  id="cart-count-badge"
-					  class="cart-count"
-					  th:text="${session.cartCount} ?: 0"
-					  th:attr="aria-label=|カート内は${(session.cartCount ?: 0)}点です|, hidden=${(session.cartCount ?: 0) == 0 ? 'hidden' : null}"
-					>0</span>
+					<span id="cart-count-badge" class="cart-count" th:text="${session.cartCount} ?: 0"
+						th:attr="aria-label=|カート内は${(session.cartCount ?: 0)}点です|, hidden=${(session.cartCount ?: 0) == 0 ? 'hidden' : null}">0</span>
 					<img th:src="@{/images/icon_cart_black.svg}" alt="cart" class="cart-icon">
 				</a>
 
 
-				<p th:if="${session.loginUser != null}"> ようこそ、<span th:text="${session.loginUser.memberName}"></span> さん
-				</p>
+
 
 
 				<!--<a th:href="@{/login}" class="header-link">ログイン</a>-->

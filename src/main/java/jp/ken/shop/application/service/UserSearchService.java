@@ -64,6 +64,14 @@ import jp.ken.shop.domain.repository.UserRepository;
 
 		    return list.get(0).getMemberId();
 		}
+		public UserEntity loadUserEntityByEmail(String email) {
+			List<UserEntity> list = userRepository.findByMemberEmail(email);
+			if(list.isEmpty()) {
+		    return null;
+			}    
+			return list.get(0);
+		}
+
 
 }
 

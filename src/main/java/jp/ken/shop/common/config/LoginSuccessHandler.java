@@ -31,10 +31,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
 
         Integer memberId = userSearchService.findMemberIdByEmail(email);
-
+        var user = userSearchService.loadUserEntityByEmail(email);
         HttpSession session = request.getSession(true);
         session.setAttribute("memberId", memberId);
-
+        session.setAttribute("loginUser", user);
         // ログイン成功後の遷移先（SecurityConfig の defaultSuccessUrl と揃える）
         response.sendRedirect(request.getContextPath() + "/top");
     }

@@ -8,6 +8,6 @@ public class UserEntity {
 	private int memberId;
 	private String memberMail;
 	private String memberPassword;
-	
+	private String memberName;
 
 }
