@@ -12,6 +12,7 @@
 
 	<link rel="stylesheet" th:href="@{/css/header.css}">
 	<link rel="stylesheet" th:href="@{/css/cart.css}">
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
 	<!-- 数量変更用JS -->
 	<script defer th:src="@{/js/cart.js}"></script>
 </head>
@@ -95,7 +96,7 @@
 
 		<footer class="site-footer">© KEN INTERIOR SHOP</footer>
 	</main>
-
+	<div th:replace="~{footer :: footer}"></div>
 </body>
 
 </html>

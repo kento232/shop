@@ -6,14 +6,14 @@
 	<title th:text="${product != null ? product.productName : '商品詳細'}">商品詳細</title>
 	<link th:href="@{/css/products.css}" rel="stylesheet" href="products.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>商品詳細 | KEN INTERIOR SHOP</title>
+	<title>商品詳細 | KEN INTERIOR SHOP</title>
 
 	<!-- ヘッダーCSS -->
 	<link rel="stylesheet" th:href="@{/css/header.css}">
 	<!-- カートCSS -->
 	<link rel="stylesheet" th:href="@{/css/cart.css}">
 
-
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
 	<!-- ✅ ヘッダー差し込み -->
 </head>
 
@@ -27,100 +27,104 @@
 	<!-- 詳細表示 -->
 	<main th:if="${product != null}">
 		<nav class="breadcrumb" aria-label="パンくずリスト">
-  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
-    <!-- 大分類 -->
-    
-<nav class="breadcrumb" aria-label="パンくずリスト" style="margin: 8px 0 16px;">
-  <ol itemscope itemtype="https://schema.org/BreadcrumbList" style="display:inline-flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0;">
-    <!-- 大分類 -->
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <span th:href="@{/category/{cid}(cid=${categoryId})}" itemprop="item">
-        <span itemprop="name" th:text="${categoryName}">大分類名</span>
-      </span>
-      <meta itemprop="position" content="1" />
-    </li>
-    <span class="separator" aria-hidden="true">›</span>
+			<ol itemscope itemtype="https://schema.org/BreadcrumbList">
+				<!-- 大分類 -->
 
-    <!-- 中分類（現在位置、リンクにしない場合は <a> を <span> に変える） -->
-    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+				<nav class="breadcrumb" aria-label="パンくずリスト" style="margin: 8px 0 16px;">
+					<ol itemscope itemtype="https://schema.org/BreadcrumbList"
+						style="display:inline-flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0;">
+						<!-- 大分類 -->
+						<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+							<span th:href="@{/category/{cid}(cid=${categoryId})}" itemprop="item">
+								<span itemprop="name" th:text="${categoryName}">大分類名</span>
+							</span>
+							<meta itemprop="position" content="1" />
+						</li>
+						<span class="separator" aria-hidden="true">›</span>
 
-<span th:href="@{/category/{cid}/sub/{sid}(cid=${categoryId}, sid=${subcategoryId})}" itemprop="item">
-        <span itemprop="name" th:text="${subcategoryName}">中分類名</span>
-      </span>
-      <meta itemprop="position" content="2" />
-    </li>
-  </ol>
-</nav>
+						<!-- 中分類（現在位置、リンクにしない場合は <a> を <span> に変える） -->
+						<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+							aria-current="page">
 
-		<div class="wrap">
-			<div class="thumb">
-				<img th:if="${product.productImage != null}"
-					th:src="@{/images/products/{img}(img=${product.productImage})}" th:alt="${product.productName}">
-				<div th:if="${product.productImage == null}" class="muted">No Image</div>
-			</div>
+							<span th:href="@{/category/{cid}/sub/{sid}(cid=${categoryId}, sid=${subcategoryId})}"
+								itemprop="item">
+								<span itemprop="name" th:text="${subcategoryName}">中分類名</span>
+							</span>
+							<meta itemprop="position" content="2" />
+						</li>
+					</ol>
+				</nav>
 
-			<section>
-				<h1 class="d-name" th:text="${product.productName}">商品名</h1>
-				<div class="sku">商品ID：<span th:text="${product.productId}">0000-000000</span></div>
+				<div class="wrap">
+					<div class="thumb">
+						<img th:if="${product.productImage != null}"
+							th:src="@{/images/products/{img}(img=${product.productImage})}"
+							th:alt="${product.productName}">
+						<div th:if="${product.productImage == null}" class="muted">No Image</div>
+					</div>
 
-				<div class="d-price">
-					<span th:if="${product.productDiscountPrice != null and product.productDiscountPrice > 0}">
-						<s th:text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA')}">39,900</s>
-					</span>
-					<!-- 割引 > 0 のとき割引価格、なければ通常価格 -->
-					<strong th:text="${#numbers.formatInteger(
+					<section>
+						<h1 class="d-name" th:text="${product.productName}">商品名</h1>
+						<div class="sku">商品ID：<span th:text="${product.productId}">0000-000000</span></div>
+
+						<div class="d-price">
+							<span th:if="${product.productDiscountPrice != null and product.productDiscountPrice > 0}">
+								<s th:text="${#numbers.formatInteger(product.productPrice, 3, 'COMMA')}">39,900</s>
+							</span>
+							<!-- 割引 > 0 のとき割引価格、なければ通常価格 -->
+							<strong th:text="${#numbers.formatInteger(
            (product.productDiscountPrice != null and product.productDiscountPrice > 0) ? product.productDiscountPrice : product.productPrice
           , 3, 'COMMA')}">3,990</strong><span>円</span>
-					<span class="pill"
-						th:if="${product.productDiscountPrice != null and product.productDiscountPrice > 0}">SALE</span>
+							<span class="pill"
+								th:if="${product.productDiscountPrice != null and product.productDiscountPrice > 0}">SALE</span>
+						</div>
+						<!-- カート追加 -->
+						<form th:action="@{/cart/add}" method="post">
+							<input type="hidden" name="productId" th:value="${product.productId}">
+							<input type="hidden" name="qty" value="1">
+
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+							<button type="submit" class="btn btn-primary" id="addToCartBtn" aria-label="カートに追加">
+								カートに追加
+							</button>
+						</form>
+
+						<div class="props">
+							<dl>
+								<dt>カテゴリID</dt>
+								<dd th:text="${product.categoryId}">—</dd>
+								<dt>サブカテゴリID</dt>
+								<dd th:text="${product.subcategoryId}">—</dd>
+								<dt>サイズ</dt>
+								<dd th:text="${product.productSize}">—</dd>
+								<dt>カラー</dt>
+								<dd th:text="${product.productColor}">—</dd>
+								<dt>素材</dt>
+								<dd th:text="${product.productMaterial}">—</dd>
+								<dt>重量</dt>
+								<dd th:text="${product.productWeight}">—</dd>
+								<dt>梱包サイズ</dt>
+								<dd th:text="${product.productPackingSize}">—</dd>
+								<dt>生産国</dt>
+								<dd th:text="${product.productManufacture}">—</dd>
+								<dt>販売期間</dt>
+								<dd>
+									<span th:text="${product.productSaleStartDay}">—</span>
+									<span> 〜 </span>
+									<span
+										th:text="${product.productSaleStopDay != null ? product.productSaleStopDay : '（未設定）'}">（未設定）</span>
+								</dd>
+								<dt>コメント</dt>
+								<dd th:text="${product.comment}">—</dd>
+							</dl>
+						</div>
+					</section>
 				</div>
-<!-- カート追加 -->
-				<form th:action="@{/cart/add}" method="post">
-					<input type="hidden" name="productId" th:value="${product.productId}">
-					<input type="hidden" name="qty" value="1">
 
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+				<p class="muted" style="margin-top:24px;">
 
-					<button type="submit" class="btn btn-primary" id="addToCartBtn" aria-label="カートに追加">
-						カートに追加
-					</button>
-				</form>
-                      
-				<div class="props">
-					<dl>
-						<dt>カテゴリID</dt>
-						<dd th:text="${product.categoryId}">—</dd>
-						<dt>サブカテゴリID</dt>
-						<dd th:text="${product.subcategoryId}">—</dd>
-						<dt>サイズ</dt>
-						<dd th:text="${product.productSize}">—</dd>
-						<dt>カラー</dt>
-						<dd th:text="${product.productColor}">—</dd>
-						<dt>素材</dt>
-						<dd th:text="${product.productMaterial}">—</dd>
-						<dt>重量</dt>
-						<dd th:text="${product.productWeight}">—</dd>
-						<dt>梱包サイズ</dt>
-						<dd th:text="${product.productPackingSize}">—</dd>
-						<dt>生産国</dt>
-						<dd th:text="${product.productManufacture}">—</dd>
-						<dt>販売期間</dt>
-						<dd>
-							<span th:text="${product.productSaleStartDay}">—</span>
-							<span> 〜 </span>
-							<span
-								th:text="${product.productSaleStopDay != null ? product.productSaleStopDay : '（未設定）'}">（未設定）</span>
-						</dd>
-						<dt>コメント</dt>
-						<dd th:text="${product.comment}">—</dd>
-					</dl>
-				</div>
-			</section>
-		</div>
-
-		<p class="muted" style="margin-top:24px;">
-			
-		</p>
+				</p>
 	</main>
 
 	<!-- フォールバック（万一 product が null の場合） -->
@@ -128,7 +132,8 @@
 		<p class="muted">商品データを取得できませんでした。</p>
 		<a href="/top">← トップへ戻る</a>
 	</main>
-
+	<div th:replace="~{footer :: footer}"></div>
 </body>
+
 
 </html>

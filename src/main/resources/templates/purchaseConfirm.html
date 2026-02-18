@@ -7,6 +7,7 @@
 	<title>商品購入確認</title>
 	<link rel="stylesheet" th:href="@{/css/order-confirm.css}" href="/css/order-confirm.css">
 	<link rel="stylesheet" th:href="@{/css/header.css}">
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 
 <body>
@@ -26,8 +27,8 @@
 			<section class="items">
 				<article class="item" th:each="item : ${cartItems}">
 					<div class="item__left">
-						<img class="product-thumb"
-						th:src="@{/images/products/{img}(img=${item.productImage})}" alt="商品画像">
+						<img class="product-thumb" th:src="@{/images/products/{img}(img=${item.productImage})}"
+							alt="商品画像">
 						<div class="item__info">
 							<div class="item__name" th:text="${item.productName}">引き出し付きハイタイプ壁面収納（120 WH）</div>
 							<div class="item__sub" th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')} + ' 円'">
@@ -124,11 +125,10 @@
 				</div>
 			</section>
 
-			<footer class="footer">
-				© KEN INTERIOR SHOP
-			</footer>
+
 		</div>
 	</main>
+	<div th:replace="~{footer :: footer}"></div>
 </body>
 
 </html>

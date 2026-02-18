@@ -10,7 +10,7 @@
 	<link th:href="@{/css/top.css}" rel="stylesheet" href="top.css">
 	<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
 
-
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
 	<script th:src="@{/js/cart-badge.js}" src="/js/cart-badge.js" defer></script>
 	<script th:src="@{/js/top.js}" src="/js/top.js" defer></script>
 
@@ -99,6 +99,7 @@
 			</div>
 		</div>
 	</div>
+	<div th:replace="~{footer :: footer}"></div>
 </body>
 
 </html>

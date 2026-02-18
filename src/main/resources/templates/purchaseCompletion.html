@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<title>購入完了画面</title>
-<link th:href="@{/css/order-complete.css}" rel="stylesheet" href="order-complete.css">
-<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
+	<meta charset="UTF-8">
+	<title>購入完了画面</title>
+	<link th:href="@{/css/order-complete.css}" rel="stylesheet" href="order-complete.css">
+	<link th:href="@{/css/header.css}" rel="stylesheet" href="header.css">
+	<link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
+
 <body>
 	<div th:replace="~{header :: header}"></div>
-	
-<!-- ✅ 購入完了：メッセージ＋購入番号＋ボタン（ここだけ） -->
-<section class="order-complete-box">
 
-  <!-- ② メッセージ枠 -->
-  <div class="complete-message">
-    ご購入ありがとうございました。商品到着までしばらくお待ちください。<br>
-    購入商品をキャンセルする場合は、発送前までに購入履歴からキャンセル手続きを行ってください。
-  </div>
+	<!-- ✅ 購入完了：メッセージ＋購入番号＋ボタン（ここだけ） -->
+	<section class="order-complete-box">
 
-  <!-- ③ お買い上げ購入番号 -->
-  <div class="purchase-no">
-    <span class="label">お買い上げ購入番号：</span>
-    <span class="no" th:text="${orderNo}">000004</span>
-  </div>
+		<!-- ② メッセージ枠 -->
+		<div class="complete-message">
+			ご購入ありがとうございました。商品到着までしばらくお待ちください。<br>
+			購入商品をキャンセルする場合は、発送前までに購入履歴からキャンセル手続きを行ってください。
+		</div>
 
-  <!-- 説明文（スクショにあるやつ） -->
-  <p class="complete-note">
-    お買い物を続ける場合は、トップ画面に戻ってください。
-  </p>
+		<!-- ③ お買い上げ購入番号 -->
+		<div class="purchase-no">
+			<span class="label">お買い上げ購入番号：</span>
+			<span class="no" th:text="${orderNo}">000004</span>
+		</div>
 
-  <!-- ④ トップに戻る -->
-  <div class="complete-actions">
-    <a class="btn-top" th:href="@{/}">トップ画面に戻る</a>
-  </div>
+		<!-- 説明文（スクショにあるやつ） -->
+		<p class="complete-note">
+			お買い物を続ける場合は、トップ画面に戻ってください。
+		</p>
 
-</section>
+		<!-- ④ トップに戻る -->
+		<div class="complete-actions">
+			<a class="btn-top" th:href="@{/}">トップ画面に戻る</a>
+		</div>
 
+	</section>
+	<div th:replace="~{footer :: footer}"></div>
 </body>
+
 </html>
