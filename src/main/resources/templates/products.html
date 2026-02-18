@@ -34,9 +34,9 @@
   <ol itemscope itemtype="https://schema.org/BreadcrumbList" style="display:inline-flex;flex-wrap:wrap;gap:.25rem;list-style:none;margin:0;padding:0;">
     <!-- 大分類 -->
     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a th:href="@{/category/{cid}(cid=${categoryId})}" itemprop="item">
+      <span th:href="@{/category/{cid}(cid=${categoryId})}" itemprop="item">
         <span itemprop="name" th:text="${categoryName}">大分類名</span>
-      </a>
+      </span>
       <meta itemprop="position" content="1" />
     </li>
     <span class="separator" aria-hidden="true">›</span>
@@ -44,9 +44,9 @@
     <!-- 中分類（現在位置、リンクにしない場合は <a> を <span> に変える） -->
     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
 
-<a th:href="@{/category/{cid}/sub/{sid}(cid=${categoryId}, sid=${subcategoryId})}" itemprop="item">
+<span th:href="@{/category/{cid}/sub/{sid}(cid=${categoryId}, sid=${subcategoryId})}" itemprop="item">
         <span itemprop="name" th:text="${subcategoryName}">中分類名</span>
-      </a>
+      </span>
       <meta itemprop="position" content="2" />
     </li>
   </ol>
