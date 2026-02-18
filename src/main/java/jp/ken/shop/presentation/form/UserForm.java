@@ -50,4 +50,5 @@ public class UserForm implements Serializable {
     private String creditNumber;
     private String creditName;
     private String creditSecurityNumber;
+    private String LoginInput;
 }

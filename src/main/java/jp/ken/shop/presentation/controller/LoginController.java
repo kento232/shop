@@ -35,7 +35,8 @@ public class LoginController {
 			return "login";
 		}
 		// バリデーションOKなら Spring Security に認証を任せる
-		return "forward:/perform_login";
+		return "redirect:/perform_login";
+
 	}
 
 }
