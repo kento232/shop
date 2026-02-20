@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jp.ken.shop.application.service.UserService;
+import jp.ken.shop.common.validator.groups.ValidGroupOrder;
 import jp.ken.shop.domain.entity.RegisterEntity;
 import jp.ken.shop.presentation.form.UserForm;
 
@@ -59,7 +60,7 @@ public class JdbcController {
 
 	@PostMapping("/register")
 	public String register(
-			@Validated @ModelAttribute("userForm") UserForm form,
+			@Validated(ValidGroupOrder.class) @ModelAttribute("userForm") UserForm form,
 			BindingResult result,
 			Model model,
 			HttpSession session,
