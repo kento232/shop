@@ -12,14 +12,15 @@ import jp.ken.shop.application.service.CartService;
 import jp.ken.shop.application.service.OrderService;
 import jp.ken.shop.application.service.UserSearchService;
 import jp.ken.shop.domain.entity.CartEntity;
+
 @RequestMapping("/order")
 @Controller
 public class OrderController {
 
 	private final CartService cartService;
 	private final OrderService orderService;
-    private final UserSearchService userSearchService;
-    
+	private final UserSearchService userSearchService;
+
 	public OrderController(CartService cartService,
 			OrderService orderService, UserSearchService userSearchService) {
 		this.cartService = cartService;
@@ -39,6 +40,7 @@ public class OrderController {
 		if (cart.getItems().isEmpty()) {
 			return "redirect:/cart"; // カート空なら戻す
 		}
+		
 
 		int totalAmount = calcTotal(cart);
 
@@ -60,24 +62,21 @@ public class OrderController {
 	 */
 	@PostMapping("/submit")
 	public String submit(HttpSession session,
-	                     RedirectAttributes ra) {
+			RedirectAttributes ra) {
 
-	    Integer memberId = (Integer) session.getAttribute("memberId");
+		Integer memberId = (Integer) session.getAttribute("memberId");
 
-	    if (memberId == null) {
-	        return "redirect:/login"; // 未ログイン
-	    }
+		if (memberId == null) {
+			return "redirect:/login"; // 未ログイン
+		}
 
-	    int purchaseId = orderService.createOrder(session, memberId);
+		int purchaseId = orderService.createOrder(session, memberId);
 
-	    String orderNo = orderService.formatOrderNo(purchaseId);
-	    ra.addFlashAttribute("orderNo", orderNo);
+		String orderNo = orderService.formatOrderNo(purchaseId);
+		ra.addFlashAttribute("orderNo", orderNo);
 
-	    return "redirect:/order/complete";
+		return "redirect:/order/complete";
 	}
-
-
-
 
 	@GetMapping("/complete")
 	public String complete(Model model) {
@@ -91,5 +90,5 @@ public class OrderController {
 		}
 		return sum;
 	}
-	
+
 }

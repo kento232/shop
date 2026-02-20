@@ -15,6 +15,11 @@
 
 
 	<main class="page">
+		<!-- ログインしていない場合のメッセージ表示 -->
+		<div th:if="${loginMessage}" class="alert alert-warning" style="margin-bottom: 1em;">
+			<p th:text="${loginMessage}"></p>
+		</div>
+
 		<div class="page__inner">
 
 			<div class="page__top">

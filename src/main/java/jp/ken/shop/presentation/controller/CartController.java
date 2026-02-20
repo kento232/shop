@@ -35,11 +35,10 @@ class CartController {
 	@GetMapping("/api/count")
 	@ResponseBody
 	public Map<String, Integer> getCountInCartPrefix(HttpSession session) {
-	    CartEntity cart = cartService.getOrCreate(session);
-	    int count = Math.max(0, cart.getCount());
-	    return Collections.singletonMap("count", count);
+		CartEntity cart = cartService.getOrCreate(session);
+		int count = Math.max(0, cart.getCount());
+		return Collections.singletonMap("count", count);
 	}
-	
 
 	@GetMapping
 
@@ -52,6 +51,10 @@ class CartController {
 		model.addAttribute("subtotal", cart.getTotal());
 		model.addAttribute("shipping", 0);
 		model.addAttribute("total", cart.getTotal());
+		Integer memberId = (Integer) session.getAttribute("memberId");
+		if (memberId == null) {
+			model.addAttribute("needLogin", true);
+		}
 
 		return "cart";
 	}
