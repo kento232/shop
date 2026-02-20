@@ -68,6 +68,9 @@ public class JdbcController {
 		if (!form.getPassword().equals(form.getConfirmPassword())) {
 			result.rejectValue("confirmPassword", "password.mismatch", "パスワードが一致しません。");
 		}
+		if (userService.existsByEmail(form.getEmail())) {
+			result.rejectValue("email","email.exists", "このメールアドレスはすでに登録されています。");
+		}
 		if (result.hasErrors()) {
 			return "memberRegist";
 		}

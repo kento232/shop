@@ -101,4 +101,7 @@ public class UserService {
 	private static String emptyToNull(String s) {
 		return (s == null || s.isBlank()) ? null : s.trim();
 	}
+	public boolean existsByEmail(String email) {
+		return userRepository.findByEmail(email).isPresent();
+	}
 }
