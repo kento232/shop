@@ -1,4 +1,5 @@
 package jp.ken.shop.presentation.controller;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,8 @@ public class TopController {
 	public String top(@ModelAttribute("form") SearchForm form, Model model,
 			@AuthenticationPrincipal LoginUser loginUser) {
 		List<Map<String, Object>> products;
-
+		LocalDate today = LocalDate.now();
+		
 		if (loginUser != null) {
 			model.addAttribute("userName", loginUser.getUsername());
 
@@ -72,12 +74,22 @@ public class TopController {
 					    p.product_image
 					FROM kenfurni_database.m_product p
 					WHERE p.valid_flag = '0'
-					  AND (p.product_sale_startday IS NULL OR CURRENT_DATE >= p.product_sale_startday)
-					  AND (p.product_sale_stopday  IS NULL OR CURRENT_DATE  < p.product_sale_stopday)
+					
+					  AND (p.product_sale_startday IS NULL OR p.product_sale_startday <= ?)
+					  AND (p.product_sale_stopday  IS NULL OR p.product_sale_stopday > ?)
 					ORDER BY p.product_id DESC
 					LIMIT ?
 					""";
-			products = jdbc.queryForList(sql, INITIAL_LIMIT);
+			
+			products = jdbc.queryForList(
+					sql,
+
+					java.sql.Date.valueOf(today),
+					java.sql.Date.valueOf(today),
+
+			        INITIAL_LIMIT
+			    );
+
 		}
 		model.addAttribute("products", products);
 		return "top";

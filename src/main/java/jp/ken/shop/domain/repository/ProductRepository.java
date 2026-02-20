@@ -1,5 +1,6 @@
 package jp.ken.shop.domain.repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class ProductRepository {
 		LocalDate today = LocalDate.now();
 		StringBuilder sql = new StringBuilder("""
 				    SELECT *
-				    FROM m_product
+				    FROM kenfurni_database.m_product 
 				    WHERE valid_flag = 0
 				      AND (product_sale_startday IS NULL OR product_sale_startday <= ?)
 				      AND (product_sale_stopday  IS NULL OR product_sale_stopday > ?)
@@ -101,14 +102,14 @@ public class ProductRepository {
 		LocalDate today = LocalDate.now();
 		StringBuilder sql = new StringBuilder("""
 				    SELECT COUNT(*)
-				    FROM m_product
+				    FROM kenfurni_database.m_product 
 				    WHERE valid_flag = 0
 				      AND (product_sale_startday IS NULL OR product_sale_startday <= ?)
 				      AND (product_sale_stopday  IS NULL OR product_sale_stopday > ?)
 				""");
 		List<Object> params = new ArrayList<>();
-		params.add(java.sql.Date.valueOf(today));
-		params.add(java.sql.Date.valueOf(today));
+		params.add(Date.valueOf(today));
+		params.add(Date.valueOf(today));
 
 		if (StringUtils.hasText(q)) {
 			sql.append(" AND product_name LIKE ? ");

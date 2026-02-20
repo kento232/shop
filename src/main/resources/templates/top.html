@@ -18,17 +18,19 @@
 
 <body>
 	<div th:replace="~{header :: header}"></div>
-	<div sec:authorize="isAuthenticated()">ログインユーザー: <span sec:authentication="name">unknown</span>
+	<div sec:authorize="isAuthenticated()"><span sec:authentication="name"></span>
 	</div>
-	<div sec:authorize="isAnonymous()">未ログイン</div>
+	<div sec:authorize="isAnonymous()"></div>
 
 	<!-- 検索 -->
 	<div class="top-actions">
 		<div class="actions-inner">
 			<div class="search-box">
 				<form th:action="@{/}" method="get" th:object="${form}">
-					<input type="text" th:field="*{keyword}" placeholder="すべてのカテゴリーから検索">
-					<button>検索</button>
+					
+<input id="keywordInput" type="text" th:field="*{keyword}" placeholder="すべてのカテゴリーから検索">
+  <button id="searchButton" type="submit">検索</button>
+
 				</form>
 			</div>
 

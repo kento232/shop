@@ -42,10 +42,10 @@ function setLoading(on) {
 // API 呼び出し 
 async function fetchProducts(page = 1) {
 	const params = new URLSearchParams();
-	const kw = keywordInput?.value?.trim();
+	//const kw = keywordInput?.value?.trim();
 	const cat = categorySelect?.value;
 
-	if (kw) params.set('keyword', kw);
+	//if (kw) params.set('keyword', kw);
 	if (cat) params.set('categoryId', cat);
 	params.set('page', String(page));
 	params.set('size', String(pageSize));
@@ -57,11 +57,21 @@ async function fetchProducts(page = 1) {
 
 	try {
 		const res = await fetch(url, { credentials: 'same-origin' });
-		if (!res.ok) {
-			throw new Error('検索に失敗しました（サーバエラー）');
-		}
-		const data = await res.json();
-		renderProducts(data.items || []);
+		
+const ct = res.headers.get('content-type') || '';
+       if (!res.ok || ct.includes('text/html')) {
+         // 未ログインリダイレクト等（HTML）→ SSRを残す（上書きしない）
+         console.warn('カテゴリAPIがHTML/エラー応答。上書き表示をスキップします。');
+         return;
+       }
+        const data = await res.json();
+
+       if (!data.items) {
+         console.warn('APIレスポンスに items がありません。上書きスキップ。');
+         return;
+      }
+       renderProducts(data.items);
+
 
 		// 更新
 		currentPage = data.page || 1;
@@ -152,26 +162,18 @@ function renderProducts(items) {
 // カテゴリ変更で即時検索
 categorySelect?.addEventListener('change', () => fetchProducts(1));
 
-// 検索ボタン（ある場合）
-searchButton?.addEventListener('click', (e) => {
-	e.preventDefault();
-	fetchProducts(1);
-});
 
-// Enter キーで検索（キーワード入力）
-keywordInput?.addEventListener('keydown', (e) => {
-	if (e.key === 'Enter') {
-		e.preventDefault();
-		fetchProducts(1);
-	}
-});
-
-// 入力のデバウンス（タイピング停止後 500ms で検索）
-let debounceId = null;
-keywordInput?.addEventListener('input', () => {
-	if (debounceId) clearTimeout(debounceId);
-	debounceId = setTimeout(() => fetchProducts(1), 500);
-});
+// キーワードはSSRで送る場合
+ // <form id="searchForm" action="/top" method="get"> ... </form>
+ const searchForm = document.querySelector('#searchForm');
+ searchButton?.addEventListener('click', (e) => {
+   // デフォルトのform submit（GET /top）に任せるので preventDefault しない
+ });
+ keywordInput?.addEventListener('keydown', (e) => {
+   if (e.key === 'Enter') {
+     // そのままform submit（SSR）
+   }
+ });
 
 
 prevBtn?.addEventListener('click', () => {
@@ -182,17 +184,11 @@ nextBtn?.addEventListener('click', () => {
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
 
-// 初期表示：カテゴリ一覧をロード → 1ページ目の検索
- fetchCategories()
-   .then(() => fetchProducts(1))
-   .catch((e) => {
-     console.warn('初期化でカテゴリ取得に失敗:', e);
-     // カテゴリ取得が失敗しても検索自体は実行（キーワードのみなど）
-     fetchProducts(1);
-   });
-});
+document.addEventListener('DOMContentLoaded', () => {
+   // 初期表示はSSRの表示を使う。カテゴリプルダウンだけ更新したければ呼ぶ。
+   fetchCategories().catch((e) => console.warn('カテゴリ取得に失敗:', e));
+ });
 
 
 /**
