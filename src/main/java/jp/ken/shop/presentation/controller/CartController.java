@@ -86,7 +86,7 @@ class CartController {
 		return "redirect:/cart";
 	}
 
-	// リクエストDTO（数量のみ）
+	// リクエストDTO（数量のみ）gg
 	static class UpdateQuantityRequest {
 		private int quantity;
 

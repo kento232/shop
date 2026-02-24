@@ -53,7 +53,7 @@
 
 						<div class="controls">
 							<div class="qty">
-								<!-- 1〜10の選択肢 -->
+								
 								<select class="js-cart-qty">
 									<option th:each="n : ${#numbers.sequence(1,10)}" th:value="${n}" th:text="${n}"
 										th:selected="${n} == ${it.qty}">

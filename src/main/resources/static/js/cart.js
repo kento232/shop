@@ -108,7 +108,7 @@ class CartQtyUpdater {
 	}
 }
 
-// 自動起動（cart.html にこのスクリプトが読み込まれたとき）
+// 自動起動（cart.html にこのスクリプトが読み込まれたとき
 document.addEventListener('DOMContentLoaded', () => {
 	new CartQtyUpdater();
 });
