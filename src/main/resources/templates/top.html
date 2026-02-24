@@ -18,9 +18,6 @@
 
 <body>
 	<div th:replace="~{header :: header}"></div>
-	<div sec:authorize="isAuthenticated()"><span sec:authentication="name"></span>
-	</div>
-	<div sec:authorize="isAnonymous()"></div>
 
 	<!-- 検索 -->
 	<div class="top-actions">
@@ -45,8 +42,7 @@
 			<!-- カートへ進むボタン -->
 			<a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
 			<div id="messageArea" class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
-			<!-- “該当する商品がありません。” の表示 -->
-			<div class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
+			
 			<!-- 商品一覧 -->
 			<h2 class="section-title">おすすめアイテム</h2>
 
