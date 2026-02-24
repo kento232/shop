@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ログイン</title>
-	<link th:href="@{/css/login_1.css}" rel="stylesheet">
+	<link th:href="@{/css/login.css}" rel="stylesheet">
 	<link rel="stylesheet" th:href="@{/css/header.css}">
 	<link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
@@ -14,9 +14,12 @@
 	<div id="wrapper">
 
 		<header>
-			<h1>ログイン</h1>
-			<a th:href="@{/top}">トップに戻る</a>
+			<h1 class="page-title">ログイン</h1>
+<div class="header-actions">
+  <a class="back-pill" href="/">トップ画面に戻る</a>
+</div>
 		</header>
+		<section id="form-area">
 		<form th:action="@{/login}" method="post" th:object="${loginForm}" novalidate>
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			<!-- 認証失敗（資格情報が誤り） -->
@@ -41,7 +44,7 @@
 				<input type="submit" value="ログイン">
 			</div>
 		</form>
-
+		</section>
 		<!-- ログアウト後 -->
 		<div class="info" th:if="${param.logout}">
 			<p>ログアウトしました。</p>
