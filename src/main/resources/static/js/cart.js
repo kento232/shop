@@ -81,6 +81,7 @@ class CartQtyUpdater {
 					'Content-Type': 'application/json',
 					...(this.csrfToken && this.csrfHeader ? { [this.csrfHeader]: this.csrfToken } : {})
 				},
+				credentials: 'include',  // （Cookie/Session を送る）
 				body : JSON.stringify({ quantity})
 			});
 			if(!res.ok){

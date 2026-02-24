@@ -63,6 +63,12 @@ public class SecurityConfig {
 
 				.requestMatchers(HttpMethod.POST, "/shop/register").permitAll()
 				// API（カテゴリ一覧・検索）は未ログインでも使えるように
+				.requestMatchers(HttpMethod.POST, "/cart/api/items/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/cart/api/count").permitAll()
+				// それ以外のAPI方針（必要に応じて変更）
+				.requestMatchers("/cart/api/**").authenticated()
+				// 画面はとりあえず全許可など、要件で調整
+
 				.requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/products/search").permitAll()
 				.requestMatchers("/perform_login").permitAll()
