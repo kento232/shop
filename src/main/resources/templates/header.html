@@ -36,11 +36,8 @@
 					<span id="cart-count-badge" class="cart-count" th:text="${session.cartCount} ?: 0"
 						th:attr="aria-label=|カート内は${(session.cartCount ?: 0)}点です|, hidden=${(session.cartCount ?: 0) == 0 ? 'hidden' : null}">0</span>
 					<img th:src="@{/images/icon_cart_black.svg}" alt="cart" class="cart-icon">
+					
 				</a>
-
-
-
-
 
 				<!--<a th:href="@{/login}" class="header-link">ログイン</a>-->
 

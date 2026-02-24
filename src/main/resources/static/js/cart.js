@@ -66,10 +66,44 @@ class CartQtyUpdater {
 			if (badge && typeof data.cartCount === 'number') {
 				badge.textContent = this.format(data.cartCount);
 			}
+			window.dispatchEvent(new Event('cart:refresh'));
 
 		} catch (err) {
 			alert(err.message || '数量更新に失敗しました');
 			// 必要であれば、元の値に戻す等のロールバックをここに実装
+		}
+	}
+	async updateCartQuantity(productId, quantity, itemEl){
+		try{
+			const res  = await fetch(`${this.endpointBase}/${encodeURIComponent(productId)}/quantity`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					...(this.csrfToken && this.csrfHeader ? { [this.csrfHeader]: this.csrfToken } : {})
+				},
+				body : JSON.stringify({ quantity})
+			});
+			if(!res.ok){
+				const msg = await res.text();
+				throw new Error(msg || '数量更新に失敗しました');
+			}
+			
+			const data = await res.json();
+			
+			const line = itemEl.querySelector('.line-subtotal');
+			if (line && typeof data.itemSubtotal === 'number'){
+				line.textContent = this.format(data.itemSubtotal);
+			}
+			const sub = document.getElementById('summary-subtotal');
+			const shp = document.getElementById('summary-shipping');
+			const ttl = document.getElementById('summary-total');
+			if(sub) sub.textContent = this.format(data.cartSubtotal);
+			if(shp) shp.textContent = this.format(data.shipping);
+			if(ttl) ttl.textContent = this.format(data.cartTotal);
+			
+			window.dispatchEvent(new Event('cart:refresh'));
+		}catch(err){
+			alert(err.message || '数量更新に失敗しました');
 		}
 	}
 }

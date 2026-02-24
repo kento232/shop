@@ -98,4 +98,5 @@ public class JdbcController {
 		return "redirect:/shop/confirm";
 		// return "redirect:/shop/confirm"; でもOK
 	}
+
 }

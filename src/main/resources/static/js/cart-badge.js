@@ -213,5 +213,6 @@
 	} else {
 		global.CartBadge = CartBadge;
 	}
+	
 
 })(this);
