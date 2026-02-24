@@ -60,7 +60,7 @@ public class SecurityConfig {
 				.requestMatchers("/cart").permitAll()
 				.requestMatchers("/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
 				.requestMatchers(HttpMethod.POST, "/cart/add").permitAll()
-
+				.requestMatchers(HttpMethod.POST, "/cart/delete").permitAll()
 				.requestMatchers(HttpMethod.POST, "/shop/register").permitAll()
 				// API（カテゴリ一覧・検索）は未ログインでも使えるように
 				.requestMatchers(HttpMethod.POST, "/cart/api/items/**").permitAll()
