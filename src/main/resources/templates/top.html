@@ -40,9 +40,20 @@
 			</div>
 
 			<!-- カートへ進むボタン -->
-			<a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
-			<div id="messageArea" class="muted" th:if="${noResultMessage != null}" th:text="${noResultMessage}"></div>
 			
+<!-- カートへ進むボタン：右列の3行目／右寄せ -->
+<div style="grid-column: 3; grid-row: 3; justify-self: end;">
+  <a class="go-cart-btn" th:href="@{/cart}">カート詳細へ</a>
+</div>
+
+<!-- メッセージは全幅の4行目に置く（次セクションとの干渉回避） -->
+<div id="messageArea"
+     class="muted"
+     style="grid-column: 1 / -1; grid-row: 4;"
+     th:if="${noResultMessage != null}"
+     th:text="${noResultMessage}">
+</div>
+
 			<!-- 商品一覧 -->
 			<h2 class="section-title">おすすめアイテム</h2>
 
@@ -84,13 +95,7 @@
 						</button>
 
 
-						<!-- 追加済み -->
-
-						<button type="button" class="js-add-to-cart-btn is-added" disabled
-							th:if="${cartProductIds != null and cartProductIds.contains(item['product_id'])}"
-							th:attr="data-product-id=${item['product_id']}">
-							カート追加済み
-						</button>
+						
 
 					</form>
 				</article>

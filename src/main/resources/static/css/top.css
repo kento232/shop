@@ -202,6 +202,7 @@ body {
   margin: 0 0 12px;
 }
 .price-old {
+	display: inline;
   color: var(--c-muted);
   text-decoration: line-through;
   font-size: 14px;
@@ -211,33 +212,72 @@ body {
   font-weight: 900;
   font-size: 20px;
 }
+/* 高さ固定（お好みで調整できる） */
+:root {
+  --add-btn-height: 44px;
+}
 
-/* 追加ボタン */
-.card-actions { margin-top: 4px; }
-.cart-btn {
-  display: inline-block;
-  width: 100%;
+/* カートに追加ボタンの高さ統一 */
+.product-card form .js-add-to-cart-btn {
+  height: var(--add-btn-height);
+  display: flex;               /* 中央寄せ（デザインは変わらない） */
+  align-items: center;         /* 垂直中央 */
+  justify-content: center;     /* 水平中央 */
+
+  padding: 0 12px;             /* 上下paddingは高さに含めない */
+  line-height: 1;              
+  white-space: nowrap;         /* 改行による高さ崩れ防止 */
+}
+/* ========== カートに追加ボタン（button版） ========== */
+/* UA(ブラウザ)既定のボタン外観をリセットして、見た目を統一 */
+.product-card form .js-add-to-cart-btn {
+	
+margin-top:auto;  /* ボタンを最下部に固定 */
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  display: block;            /* ブロックにして */
+  width: 100%;               /* 横いっぱい（画像どおり） */
   text-align: center;
-  padding: 12px 0;
-  border-radius: 6px;
+
+  padding: 12px 0;           /* 画像に近い上下の余白 */
+  line-height: 1;            /* 文字上下の詰まりを調整 */
   font-size: 14px;
   font-weight: 700;
-  text-decoration: none;
-  transition: .15s ease;
-  border: 1px solid transparent;
-}
-.cart-btn--add {
-  background: #000;
-  color: #fff;
-}
-.cart-btn--add:hover { opacity: .85; }
-.cart-btn--added {
-  background: #e5e5e5;
-  color: #333;
-  border-color: #d9d9d9;
-  cursor: default;
+  letter-spacing: .03em;
+  font-family: inherit;      /* ページのフォントに合わせる */
+
+  background: #000;          /* 黒背景（画像の見た目） */
+  color: #fff;               /* 白文字 */
+  border: 1px solid #000;    /* 実質フラットだが枠で引き締め */
+  border-radius: 6;          /* 角丸 */
+
+  cursor: pointer;
+  transition: background-color .15s ease, opacity .15s ease;
+  box-sizing: border-box;
+  text-decoration: none;     /* 念のため */
 }
 
+/* ホバー＆アクティブ時：ほんの少しだけ明度アップ */
+.product-card form .js-add-to-cart-btn:hover,
+.product-card form .js-add-to-cart-btn:active {
+  background: #111;
+}
+
+/* キーボードフォーカスの可視化（アクセシビリティ） */
+.product-card form .js-add-to-cart-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+
+
+/* （任意）フォームがインライン要素の場合に備えて */
+.product-card form {
+  display: block;   /* ボタンの100%幅が効かない時の保険 */
+  margin: 0;
+}
 /* =========================
    レスポンシブ
 ========================= */
