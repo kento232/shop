@@ -173,7 +173,7 @@
 	}
 
 	function init() {
-		// 初期表示gg
+		// 初期表示ggｓ
 		fetchCountAndRender();
 		// 既存ボタンをバインド
 		bindAddButtons();

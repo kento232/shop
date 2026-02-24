@@ -99,7 +99,7 @@ class CartController {
 		}
 	}
 
-	// レスポンスDTO（画面反映に必要な最低限の値）
+	// レスポンスDTO（画面反映に必要な最低限の値）ｔ
 	static class UpdateQuantityResponse {
 		public int itemSubtotal;
 		public int cartSubtotal;
